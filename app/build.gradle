@@ -4,9 +4,10 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdk 34
     buildToolsVersion '34.0.0'
+    namespace "com.lksnext.parkingagarcia"
 
     defaultConfig {
-        applicationId "com.lksnext.parkingplantilla"
+        applicationId "com.lksnext.parkingagarcia"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1

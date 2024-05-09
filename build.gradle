@@ -4,9 +4,21 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1'
+        classpath 'com.android.tools.build:gradle:8.3.2'
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7'
 
+    }
+}
+
+plugins {
+    id "org.sonarqube" version "4.4.1.3373"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "adriangm10_parking"
+        property "sonar.organization", "adriangm10"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
