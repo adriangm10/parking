@@ -10,7 +10,7 @@
     <Button
         android:id="@+id/loginButton"
         style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:text="Login"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:text="BIENVENIDO"
+        android:text="LOG IN"
         android:textColor="@color/orange"
         android:textSize="35sp"
         android:textStyle="bold"
@@ -62,11 +62,12 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
         style="@style/Theme.ParkingLKS.TextInputLayout"
-        android:layout_width="280dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:hint="Enter your email*"
         android:inputType="text"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title">
@@ -81,7 +82,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
         style="@style/Theme.ParkingLKS.TextInputLayout"
-        android:layout_width="280dp"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Enter your password*"
