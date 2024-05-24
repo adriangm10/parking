@@ -29,18 +29,20 @@ public class LoginViewModel extends ViewModel {
         return passwordError;
     }
 
-    private void setErrorMessage(MutableLiveData<String> fieldError, String value, String errorMsg) {
+    private boolean setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
         if (value.isEmpty()) {
             fieldError.setValue(errorMsg);
+            return true;
         } else {
             fieldError.setValue(null);
+            return false;
         }
     }
 
     public void loginUser(String email, String password) {
-        setErrorMessage(emailError, email, "Email is required");
-        setErrorMessage(passwordError, password, "Password is required");
-        if (email.isEmpty() || password.isEmpty()) return;
+        boolean ret = setEmptyError(emailError, email, "Email is required");
+        ret |= setEmptyError(passwordError, password, "Password is required");
+        if (ret) return;
         DataRepository.getInstance().login(email, password, new Callback() {
             @Override
             public void onSuccess() {
