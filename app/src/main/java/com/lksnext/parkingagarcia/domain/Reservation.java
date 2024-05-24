@@ -12,6 +12,13 @@ public class Reserve {
 
     }
 
+    public Reserve(String date, String id, Place place, Hour hour) {
+        this.date = date;
+        this.place = place;
+        this.hour = hour;
+        this.id = id;
+    }
+
     public Reserve(String date, String user, String id, Place place, Hour hour) {
         this.date = date;
         this.user = user;
@@ -44,19 +51,11 @@ public class Reserve {
         this.place = place;
     }
 
-    public Hour getHourStart() {
+    public Hour getHour() {
         return hour;
     }
 
-    public void setHourStart(Hour hour) {
-        this.hour = hour;
-    }
-
-    public Hour getHourEnd() {
-        return hour;
-    }
-
-    public void setHourEnd(Hour hour) {
+    public void setHour(Hour hour) {
         this.hour = hour;
     }
 
