@@ -1,15 +1,15 @@
 package com.lksnext.parkingagarcia.domain;
 
-public class Hora {
+public class Hour {
 
     long horaInicio;
     long horaFin;
 
-    public Hora() {
+    public Hour() {
 
     }
 
-    public Hora(long horaInicio, long horaFin) {
+    public Hour(long horaInicio, long horaFin) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
     }
