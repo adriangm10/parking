@@ -45,7 +45,7 @@ public class LoginViewModel extends ViewModel {
         if (ret) return;
         DataRepository.getInstance().login(email, password, new Callback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Object ... args) {
                 logged.setValue(true);
             }
 

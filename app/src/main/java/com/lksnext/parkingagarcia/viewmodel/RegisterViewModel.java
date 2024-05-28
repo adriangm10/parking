@@ -67,7 +67,7 @@ public class RegisterViewModel extends ViewModel {
 
         DataRepository.getInstance().register(name, email, pass, new Callback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(Object ... args) {
                 successMessage.setValue("User registered");
                 registered.setValue(true);
             }
