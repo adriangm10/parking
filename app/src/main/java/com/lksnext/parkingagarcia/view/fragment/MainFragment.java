@@ -2,6 +2,8 @@ package com.lksnext.parkingagarcia.view.fragment;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -20,13 +23,19 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.lksnext.parkingagarcia.R;
+import com.lksnext.parkingagarcia.domain.Hour;
 import com.lksnext.parkingagarcia.domain.Place;
+import com.lksnext.parkingagarcia.domain.Reservation;
+import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainFragment extends Fragment {
-    int year, month, dayOfMonth, startHour, endHour, startMinute, endMinute;
+    Integer year, month, dayOfMonth, startHour, endHour, startMinute, endMinute;
+
+    MainViewModel mainViewModel;
 
     Place[][] parking = {
             {new Place(1, Place.Type.ELECTRIC), new Place(2, Place.Type.ELECTRIC), new Place(3, Place.Type.ELECTRIC), new Place(4, Place.Type.ELECTRIC), new Place(5, Place.Type.ELECTRIC), new Place(6, Place.Type.ELECTRIC), new Place(7, Place.Type.ELECTRIC), new Place(8, Place.Type.ELECTRIC), new Place(9, Place.Type.ELECTRIC), new Place(10, Place.Type.ELECTRIC)},
@@ -43,6 +52,7 @@ public class MainFragment extends Fragment {
 
     Place selectedPlace;
     MaterialButton selectedButton;
+    View view;
 
     public MainFragment() {
         // Es necesario un constructor vacio
@@ -56,9 +66,86 @@ public class MainFragment extends Fragment {
         }
     }
 
+    private boolean checkNulls() {
+        boolean ret = false;
+        if (selectedPlace == null) {
+            Toast.makeText(getContext(), "Select a place", Toast.LENGTH_SHORT).show();
+            ret = true;
+        }
+        if (year == null || month == null || dayOfMonth == null) {
+            ((EditText) view.findViewById(R.id.dateText)).setError("Select a date");
+            ret = true;
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month - 1, dayOfMonth);
+            if (cal.before(Calendar.getInstance())) {
+                ((EditText) view.findViewById(R.id.dateText)).setError("Select a future date");
+                ret = true;
+            } else {
+                ((EditText) view.findViewById(R.id.dateText)).setError(null);
+            }
+        }
+        if (startHour == null) {
+            ((EditText) view.findViewById(R.id.startTimeText)).setError("Select a start time");
+            ret = true;
+        } else {
+            ((EditText) view.findViewById(R.id.startTimeText)).setError(null);
+        }
+        if (endHour == null) {
+            ((EditText) view.findViewById(R.id.endTimeText)).setError("Select an end time");
+            ret = true;
+        } else {
+            ((EditText) view.findViewById(R.id.endTimeText)).setError(null);
+        }
+        return ret;
+    }
+
+    private Pair<Date, Date> getDates() {
+        if (year == null || month == null || dayOfMonth == null || startHour == null || endHour == null) {
+            return null;
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, dayOfMonth, startHour, startMinute);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startDate = cal.getTime();
+
+        if (endHour < startHour) {
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        cal.set(Calendar.HOUR_OF_DAY, endHour);
+        cal.set(Calendar.MINUTE, endMinute);
+        Date endDate = cal.getTime();
+
+        return new Pair<>(startDate, endDate);
+    }
+
+    private void resetFields() {
+        selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
+        selectedPlace = null;
+        selectedButton = null;
+        year = null;
+        month = null;
+        dayOfMonth = null;
+        startHour = null;
+        endHour = null;
+        startMinute = null;
+        endMinute = null;
+        EditText t = view.findViewById(R.id.dateText);
+        t.setText(null);
+        t = view.findViewById(R.id.startTimeText);
+        t.setText(null);
+        t = view.findViewById(R.id.endTimeText);
+        t.setText(null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         GridLayout glParking = view.findViewById(R.id.glParking);
         glParking.setRowCount(parking.length);
@@ -84,6 +171,7 @@ public class MainFragment extends Fragment {
                 }
                 btn.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
                 btn.setIconSize(60);
+                btn.setId((int) place.getId());
                 btn.setOnClickListener(v -> {
                     if (selectedButton != null) {
                         selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
@@ -91,7 +179,6 @@ public class MainFragment extends Fragment {
                     btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
                     selectedButton = btn;
                     selectedPlace = place;
-                    Toast.makeText(getContext(), "Selected place: " + selectedPlace.getId(), Toast.LENGTH_SHORT).show();
                 });
                 glParking.addView(btn);
             }
@@ -109,8 +196,8 @@ public class MainFragment extends Fragment {
             MaterialDatePicker<Long> picker = MaterialDatePicker.Builder
                     .datePicker()
                     .setTitleText("Select a Date")
-                    .setSelection(System.currentTimeMillis())
-                    .setSelection(System.currentTimeMillis())
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .setCalendarConstraints(new CalendarConstraints.Builder().setValidator(validators).build())
                     .build();
 
@@ -118,9 +205,12 @@ public class MainFragment extends Fragment {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(selection);
                 year = cal.get(Calendar.YEAR);
-                month = cal.get(Calendar.MONTH);
+                month = cal.get(Calendar.MONTH) + 1;
                 dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-                dateText.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                dateText.setText(dayOfMonth + "/" + month + "/" + year);
+                if (startHour != null && endHour != null) {
+                    mainViewModel.loadReservationsForDate(dayOfMonth + "/" + month + "/" + year);
+                }
             });
 
             picker.show(getParentFragmentManager(), picker.toString());
@@ -173,6 +263,10 @@ public class MainFragment extends Fragment {
                     return;
                 }
 
+                if (month != null && dayOfMonth != null && year != null) {
+                    mainViewModel.loadReservationsForDate(dayOfMonth + "/" + month + "/" + year);
+                }
+
                 endHour = newEndHour;
                 endMinute = newEndMinute;
                 endTimeText.setError(null);
@@ -180,6 +274,41 @@ public class MainFragment extends Fragment {
             });
 
             picker.show(getParentFragmentManager(), picker.toString());
+        });
+
+        MaterialButton reserveButton = view.findViewById(R.id.btnReserve);
+        reserveButton.setOnClickListener(v -> {
+            if (checkNulls()) return;
+
+            String date = dayOfMonth + "/" + month + "/" + year;
+            String id = selectedPlace.getId() + "-" + date + "-" + startHour + "-" + endHour;
+            Pair<Date, Date> dates = getDates();
+
+            mainViewModel.reserve(date, id, selectedPlace, dates.first, dates.second);
+            resetFields();
+        });
+
+        mainViewModel.getError().observe(getViewLifecycleOwner(), error ->
+            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show()
+        );
+
+        mainViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success ->
+            Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show()
+        );
+
+        mainViewModel.getReservationsForDate().observe(getViewLifecycleOwner(), reservations -> {
+            Pair<Date, Date> dates = getDates();
+            for (Reservation r : reservations) {
+                Log.d("MainFragment", "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
+                if (r.getHour().isOverlapping(new Hour(dates.first, dates.second))) {
+                    Log.d("MainFragment", "Disabling place " + (int) r.getPlace().getId());
+                    MaterialButton btn = view.findViewById((int) r.getPlace().getId());
+                    Log.d("MainFragment", "Button: " + btn.getText());
+                    btn.setEnabled(false);
+                } else {
+                    view.findViewById((int) r.getPlace().getId()).setEnabled(true);
+                }
+            }
         });
 
         return view;
