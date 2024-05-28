@@ -1,32 +1,50 @@
 package com.lksnext.parkingagarcia.domain;
 
+import java.util.Date;
+
 public class Hour {
 
-    long horaInicio;
-    long horaFin;
+    long startTime; // In milliseconds
+    long endTime; // In milliseconds
+    String fromTo;
 
     public Hour() {
 
     }
 
-    public Hour(long horaInicio, long horaFin) {
-        this.horaInicio = horaInicio;
-        this.horaFin = horaFin;
+    public Hour(Date startDate, Date endDate) {
+        this.startTime = startDate.getTime();
+        this.endTime = endDate.getTime();
+        this.fromTo = startDate + " - " + endDate;
     }
 
-    public long getHoraInicio() {
-        return horaInicio;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setHoraInicio(long horaInicio) {
-        this.horaInicio = horaInicio;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
     }
 
-    public long getHoraFin() {
-        return horaFin;
+    public long getEndTime() {
+        return endTime;
     }
 
-    public void setHoraFin(long horaFin) {
-        this.horaFin = horaFin;
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFromTo() {
+        return fromTo;
+    }
+
+    public void setFromTo(String fromTo) {
+        this.fromTo = fromTo;
+    }
+
+    public boolean isOverlapping(Hour h){
+        return (this.startTime >= h.startTime && this.startTime <= h.endTime) ||
+                (this.endTime >= h.startTime && this.endTime <= h.endTime) ||
+                (this.startTime <= h.startTime && this.endTime >= h.endTime);
     }
 }

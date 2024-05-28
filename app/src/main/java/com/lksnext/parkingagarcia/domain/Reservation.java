@@ -1,25 +1,24 @@
 package com.lksnext.parkingagarcia.domain;
 
-public class Reserve {
-
+public class Reservation {
     String date, user, id;
 
     Place place;
 
     Hour hour;
 
-    public Reserve() {
+    public Reservation() {
 
     }
 
-    public Reserve(String date, String id, Place place, Hour hour) {
+    public Reservation(String date, String id, Place place, Hour hour) {
         this.date = date;
         this.place = place;
         this.hour = hour;
         this.id = id;
     }
 
-    public Reserve(String date, String user, String id, Place place, Hour hour) {
+    public Reservation(String date, String user, String id, Place place, Hour hour) {
         this.date = date;
         this.user = user;
         this.place = place;
@@ -43,11 +42,11 @@ public class Reserve {
         this.user = user;
     }
 
-    public Place getPlazaId() {
+    public Place getPlace() {
         return place;
     }
 
-    public void setPlazaId(Place place) {
+    public void setPlace(Place place) {
         this.place = place;
     }
 
