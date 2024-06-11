@@ -76,7 +76,23 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onSuccess(Object ... args) {
                 List<Reservation> rs = (List<Reservation>) args[0];
+                Log.d("MainViewModel", "User reservations: " + rs);
                 userReservations.setValue(rs);
+            }
+
+            @Override
+            public void onFailure(String message, String errorCode) {
+                error.setValue(message);
+            }
+        });
+    }
+
+    public void cancelUserReservation(Reservation r) {
+        DataRepository.getInstance().cancelUserReservation(r, new Callback() {
+            @Override
+            public void onSuccess(Object ... args) {
+                userReservations.getValue().remove(r);
+                successMessage.setValue("Reservation canceled");
             }
 
             @Override

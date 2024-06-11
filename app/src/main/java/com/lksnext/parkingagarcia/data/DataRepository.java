@@ -81,7 +81,8 @@ public class DataRepository {
         reservation.setUser(auth.getCurrentUser().getDisplayName());
 
         db.collection("reservations")
-                .add(reservation)
+                .document()
+                .set(reservation)
                 .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Reserve added");
@@ -125,6 +126,30 @@ public class DataRepository {
                 callback.onSuccess(reservations);
             } else {
                 Log.e(TAG, "Could not get user reservations", task.getException());
+                callback.onFailure(task.getException().getMessage(), "");
+            }
+        });
+    }
+
+    public void cancelUserReservation(Reservation reservation, Callback callback) {
+        db.collection("reservations")
+                .whereEqualTo("id", reservation.getId())
+                .get()
+                .addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult().size() != 1) {
+                    callback.onFailure("Something gone wrong finding reservation", "");
+                    return;
+                }
+
+                for (QueryDocumentSnapshot i : task.getResult()) {
+                    i.getReference().delete();
+                }
+
+                Log.d(TAG, "Reservation deleted");
+                callback.onSuccess();
+            } else {
+                Log.e(TAG, "Could not delete reservation", task.getException());
                 callback.onFailure(task.getException().getMessage(), "");
             }
         });
