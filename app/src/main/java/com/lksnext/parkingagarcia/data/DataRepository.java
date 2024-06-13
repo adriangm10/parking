@@ -154,4 +154,28 @@ public class DataRepository {
             }
         });
     }
+
+    public void editUserReservation(Reservation newReservation, String origReservation, Callback callback) {
+        db.collection("reservations")
+                .whereEqualTo("id", origReservation)
+                .get()
+                .addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult().size() != 1) {
+                    callback.onFailure("Something gone wrong finding reservation", "");
+                    return;
+                }
+
+                for (QueryDocumentSnapshot i : task.getResult()) {
+                    i.getReference().set(newReservation);
+                }
+
+                Log.d(TAG, "Reservation edited");
+                callback.onSuccess();
+            } else {
+                Log.e(TAG, "Could not edit reservation", task.getException());
+                callback.onFailure(task.getException().getMessage(), "");
+            }
+        });
+    }
 }

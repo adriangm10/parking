@@ -13,10 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingagarcia.R;
 import com.lksnext.parkingagarcia.ReservationCard;
+import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ResFragment extends Fragment {
     private View view;
@@ -36,14 +34,14 @@ public class ResFragment extends Fragment {
         mainViewModel.getUserReservations().observe(getViewLifecycleOwner(), reservationsList -> {
             reservations.removeAllViews();
             for (int i = 0; i < reservationsList.size(); i++) {
-                SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", getResources().getConfiguration().getLocales().get(0));
                 ReservationCard reservationCard = new ReservationCard(getContext());
                 reservationCard.setPlaceNumber(reservationsList.get(i).getPlace().getId());
                 reservationCard.setDateText(reservationsList.get(i).getDate());
                 reservationCard.setHourText(
-                        formatter.format(new Date(reservationsList.get(i).getHour().getStartTime())),
-                        formatter.format(new Date(reservationsList.get(i).getHour().getEndTime()))
+                        Utils.formatTimeToHHmm(reservationsList.get(i).getHour().getStartTime(), getResources().getConfiguration().getLocales().get(0)),
+                        Utils.formatTimeToHHmm(reservationsList.get(i).getHour().getEndTime(), getResources().getConfiguration().getLocales().get(0))
                 );
+
                 switch (reservationsList.get(i).getPlace().getType()) {
                     case NORMAL:
                         reservationCard.setPlaceImage(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_normal, null));
@@ -63,6 +61,11 @@ public class ResFragment extends Fragment {
                 reservationCard.setCancelBtnOnClickListener(v -> {
                     mainViewModel.cancelUserReservation(reservationsList.get(finalI));
                     reservations.removeView(reservationCard);
+                });
+
+                reservationCard.setEditBtnOnClickListener(v -> {
+                    EditFragment editFragment = EditFragment.newInstance(reservationsList.get(finalI));
+                    editFragment.show(getParentFragmentManager(), "editFragment");
                 });
 
                 reservations.addView(reservationCard);

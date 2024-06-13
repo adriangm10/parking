@@ -101,4 +101,20 @@ public class MainViewModel extends ViewModel {
             }
         });
     }
+
+    public void editUserReservation(Reservation newReservation, String origReservationId) {
+        DataRepository.getInstance().editUserReservation(newReservation, origReservationId, new Callback() {
+            @Override
+            public void onSuccess(Object ... args) {
+                userReservations.getValue().remove(newReservation);
+                userReservations.getValue().add(newReservation);
+                successMessage.setValue("Reservation edited");
+            }
+
+            @Override
+            public void onFailure(String message, String errorCode) {
+                error.setValue(message);
+            }
+        });
+    }
 }

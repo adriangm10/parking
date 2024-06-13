@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".view.fragment.EditFragment">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="EDIT RESERVATION"
+        android:textSize="25sp"
+        android:layout_marginTop="75dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/orange"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rlDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_below="@id/tvTitle">
+
+        <EditText
+            android:id="@+id/startTimeText"
+            style="@style/Theme.ParkingLKS.TextInputLayout"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="time"
+            android:hint="Start"
+            android:textSize="20sp"/>
+
+        <ImageView
+            android:id="@+id/startClock"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="3dp"
+            android:src="@drawable/clock_icon"
+            android:layout_marginTop="8dp"
+            android:layout_alignTop="@id/startTimeText"
+            android:layout_alignEnd="@id/startTimeText"/>
+
+        <EditText
+            android:id="@+id/dateText"
+            style="@style/Theme.ParkingLKS.TextInputLayout"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Date"
+            android:textSize="20sp"
+            android:inputType="date"
+            android:layout_alignParentEnd="true"/>
+
+        <ImageView
+            android:id="@+id/dateIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="3dp"
+            android:src="@drawable/calendar_blank_icon"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="2dp"
+            android:layout_alignEnd="@id/dateText"
+            android:layout_alignTop="@id/dateText"/>
+
+        <EditText
+            android:id="@+id/endTimeText"
+            style="@style/Theme.ParkingLKS.TextInputLayout"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="End"
+            android:textSize="20sp"
+            android:textAlignment="textEnd"
+            android:inputType="time"
+            android:layout_below="@id/startTimeText"/>
+
+        <ImageView
+            android:id="@+id/endClock"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="3dp"
+            android:src="@drawable/clock_icon"
+            android:layout_marginTop="8dp"
+            android:layout_alignStart="@id/endTimeText"
+            android:layout_alignTop="@id/endTimeText"/>
+
+    </RelativeLayout>
+
+
+    <HorizontalScrollView
+        android:id="@+id/svParking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlDateTime"
+        android:layout_centerHorizontal="true">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="300dp">
+
+            <GridLayout
+                android:id="@+id/glParking"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:padding="10dp"
+                android:useDefaultMargins="true"/>
+
+        </ScrollView>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/svParking"
+        android:layout_marginTop="20dp"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="CANCEL"
+            android:scrollbars="vertical" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="CONFIRM"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

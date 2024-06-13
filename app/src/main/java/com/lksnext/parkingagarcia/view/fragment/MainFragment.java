@@ -22,6 +22,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.R;
 import com.lksnext.parkingagarcia.domain.Hour;
 import com.lksnext.parkingagarcia.domain.Place;
@@ -36,19 +37,6 @@ public class MainFragment extends Fragment {
     Integer year, month, dayOfMonth, startHour, endHour, startMinute, endMinute;
 
     MainViewModel mainViewModel;
-
-    Place[][] parking = {
-            {new Place(1, Place.Type.ELECTRIC), new Place(2, Place.Type.ELECTRIC), new Place(3, Place.Type.ELECTRIC), new Place(4, Place.Type.ELECTRIC), new Place(5, Place.Type.ELECTRIC), new Place(6, Place.Type.ELECTRIC), new Place(7, Place.Type.ELECTRIC), new Place(8, Place.Type.ELECTRIC), new Place(9, Place.Type.ELECTRIC), new Place(10, Place.Type.ELECTRIC)},
-            {new Place(11, Place.Type.DISABLED), new Place(12, Place.Type.NORMAL), new Place(13, Place.Type.NORMAL), new Place(14, Place.Type.NORMAL), new Place(15, Place.Type.NORMAL), new Place(16, Place.Type.NORMAL), new Place(17, Place.Type.NORMAL), new Place(18, Place.Type.NORMAL), new Place(19, Place.Type.NORMAL), new Place(20, Place.Type.DISABLED)},
-            {new Place(21, Place.Type.DISABLED), new Place(22, Place.Type.NORMAL), new Place(23, Place.Type.NORMAL), new Place(24, Place.Type.NORMAL), new Place(25, Place.Type.NORMAL), new Place(26, Place.Type.NORMAL), new Place(27, Place.Type.NORMAL), new Place(28, Place.Type.NORMAL), new Place(29, Place.Type.NORMAL), new Place(30, Place.Type.DISABLED)},
-            {new Place(31, Place.Type.DISABLED), new Place(32, Place.Type.NORMAL), new Place(33, Place.Type.NORMAL), new Place(34, Place.Type.NORMAL), new Place(35, Place.Type.NORMAL), new Place(36, Place.Type.NORMAL), new Place(37, Place.Type.NORMAL), new Place(38, Place.Type.NORMAL), new Place(39, Place.Type.NORMAL), new Place(40, Place.Type.DISABLED)},
-            {new Place(41, Place.Type.DISABLED), new Place(42, Place.Type.NORMAL), new Place(43, Place.Type.NORMAL), new Place(44, Place.Type.NORMAL), new Place(45, Place.Type.NORMAL), new Place(46, Place.Type.NORMAL), new Place(47, Place.Type.NORMAL), new Place(48, Place.Type.NORMAL), new Place(49, Place.Type.NORMAL), new Place(50, Place.Type.DISABLED)},
-            {new Place(51, Place.Type.DISABLED), new Place(52, Place.Type.NORMAL), new Place(53, Place.Type.NORMAL), new Place(54, Place.Type.NORMAL), new Place(55, Place.Type.NORMAL), new Place(56, Place.Type.NORMAL), new Place(57, Place.Type.NORMAL), new Place(58, Place.Type.NORMAL), new Place(59, Place.Type.NORMAL), new Place(60, Place.Type.DISABLED)},
-            {new Place(61, Place.Type.DISABLED), new Place(62, Place.Type.NORMAL), new Place(63, Place.Type.NORMAL), new Place(64, Place.Type.NORMAL), new Place(65, Place.Type.NORMAL), new Place(66, Place.Type.NORMAL), new Place(67, Place.Type.NORMAL), new Place(68, Place.Type.NORMAL), new Place(69, Place.Type.NORMAL), new Place(70, Place.Type.DISABLED)},
-            {new Place(71, Place.Type.DISABLED), new Place(72, Place.Type.NORMAL), new Place(73, Place.Type.NORMAL), new Place(74, Place.Type.NORMAL), new Place(75, Place.Type.NORMAL), new Place(76, Place.Type.NORMAL), new Place(77, Place.Type.NORMAL), new Place(78, Place.Type.NORMAL), new Place(79, Place.Type.NORMAL), new Place(80, Place.Type.DISABLED)},
-            {new Place(81, Place.Type.DISABLED), new Place(82, Place.Type.NORMAL), new Place(83, Place.Type.NORMAL), new Place(84, Place.Type.NORMAL), new Place(85, Place.Type.NORMAL), new Place(86, Place.Type.NORMAL), new Place(87, Place.Type.NORMAL), new Place(88, Place.Type.NORMAL), new Place(89, Place.Type.NORMAL), new Place(90, Place.Type.DISABLED)},
-            {new Place(91, Place.Type.MOTORCYCLE), new Place(92, Place.Type.MOTORCYCLE), new Place(93, Place.Type.MOTORCYCLE), new Place(94, Place.Type.MOTORCYCLE), new Place(95, Place.Type.MOTORCYCLE), new Place(96, Place.Type.MOTORCYCLE), new Place(97, Place.Type.MOTORCYCLE), new Place(98, Place.Type.MOTORCYCLE), new Place(99, Place.Type.MOTORCYCLE), new Place(100, Place.Type.MOTORCYCLE)},
-    };
 
     Place selectedPlace;
     MaterialButton selectedButton;
@@ -148,41 +136,18 @@ public class MainFragment extends Fragment {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         GridLayout glParking = view.findViewById(R.id.glParking);
-        glParking.setRowCount(parking.length);
-        glParking.setColumnCount(parking[0].length);
+        glParking.setRowCount(Utils.getParking().length);
+        glParking.setColumnCount(Utils.getParking()[0].length);
 
-        for (Place[] row : parking) {
-            for (Place place : row) {
-                MaterialButton btn = new MaterialButton(requireContext(), null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
-                btn.setText(String.valueOf(place.getId()));
-                switch (place.getType()) {
-                    case ELECTRIC:
-                        btn.setIconResource(R.drawable.ic_electric);
-                        break;
-                    case NORMAL:
-                        btn.setIconResource(R.drawable.ic_normal);
-                        break;
-                    case DISABLED:
-                        btn.setIconResource(R.drawable.ic_disabled);
-                        break;
-                    case MOTORCYCLE:
-                        btn.setIconResource(R.drawable.ic_motorcycle);
-                        break;
-                }
-                btn.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
-                btn.setIconSize(60);
-                btn.setId((int) place.getId());
-                btn.setOnClickListener(v -> {
-                    if (selectedButton != null) {
-                        selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
-                    }
-                    btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
-                    selectedButton = btn;
-                    selectedPlace = place;
-                });
-                glParking.addView(btn);
+        Utils.chargeParking(glParking, v -> {
+            MaterialButton btn = (MaterialButton) v;
+            if (selectedButton != null) {
+                selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
             }
-        }
+            btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
+            selectedButton = btn;
+            selectedPlace = Utils.getParking()[(btn.getId() - 1) / 10][(btn.getId() - 1) % 10];
+        }, this);
 
         EditText dateText = view.findViewById(R.id.dateText);
         dateText.setOnClickListener(v -> {
