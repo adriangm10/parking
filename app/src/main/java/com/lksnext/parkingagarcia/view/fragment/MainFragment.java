@@ -46,14 +46,6 @@ public class MainFragment extends Fragment {
         // Es necesario un constructor vacio
     }
 
-    private int hourDiff(int startHour, int endHour) {
-        if (endHour < startHour) {
-            return 24 - startHour + endHour;
-        } else {
-            return endHour - startHour;
-        }
-    }
-
     private boolean checkNulls() {
         boolean ret = false;
         if (selectedPlace == null) {
@@ -222,7 +214,7 @@ public class MainFragment extends Fragment {
                     Toast.makeText(getContext(), "End time must be after start time", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (hourDiff(startHour, newEndHour) > 9 || (newEndHour - startHour == 9 && newEndMinute > startMinute)) {
+                if (Utils.hourDiff(startHour, newEndHour) > 9 || (newEndHour - startHour == 9 && newEndMinute > startMinute)) {
                     endTimeText.setError("The maximum duration is 8 hours");
                     Toast.makeText(getContext(), "The maximum duration is 8 hours", Toast.LENGTH_SHORT).show();
                     return;
@@ -246,7 +238,7 @@ public class MainFragment extends Fragment {
             if (checkNulls()) return;
 
             String date = dayOfMonth + "/" + month + "/" + year;
-            String id = selectedPlace.getId() + "-" + date + "-" + startHour + "-" + endHour;
+            String id = selectedPlace.getId() + "-" + date + "-" + startTimeText.getText() + "-" + endTimeText.getText();
             Pair<Date, Date> dates = getDates();
 
             mainViewModel.reserve(date, id, selectedPlace, dates.first, dates.second);

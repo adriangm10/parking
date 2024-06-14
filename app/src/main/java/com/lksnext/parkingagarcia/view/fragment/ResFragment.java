@@ -64,7 +64,7 @@ public class ResFragment extends Fragment {
                 });
 
                 reservationCard.setEditBtnOnClickListener(v -> {
-                    EditFragment editFragment = EditFragment.newInstance(reservationsList.get(finalI));
+                    EditFragment editFragment = EditFragment.newInstance(reservationsList.get(finalI), mainViewModel);
                     editFragment.show(getParentFragmentManager(), "editFragment");
                 });
 

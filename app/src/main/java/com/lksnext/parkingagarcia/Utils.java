@@ -63,4 +63,13 @@ public class Utils {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", l);
         return formatter.format(new Date(millis));
     }
+
+    public static int hourDiff(int startHour, int endHour) {
+        if (endHour < startHour) {
+            return 24 - startHour + endHour;
+        } else {
+            return endHour - startHour;
+        }
+    }
+
 }
