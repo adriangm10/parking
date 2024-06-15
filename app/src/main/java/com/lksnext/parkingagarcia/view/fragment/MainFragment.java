@@ -262,6 +262,11 @@ public class MainFragment extends Fragment {
                     MaterialButton btn = view.findViewById((int) r.getPlace().getId());
                     Log.d("MainFragment", "Button: " + btn.getText());
                     btn.setEnabled(false);
+                    if (selectedButton != null && btn.getId() == selectedButton.getId()) {
+                        selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
+                        selectedButton = null;
+                        selectedPlace = null;
+                    }
                 } else {
                     view.findViewById((int) r.getPlace().getId()).setEnabled(true);
                 }

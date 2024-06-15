@@ -6,7 +6,6 @@ public class Hour {
 
     long startTime; // In milliseconds
     long endTime; // In milliseconds
-    String fromTo;
 
     public Hour() {
 
@@ -15,7 +14,6 @@ public class Hour {
     public Hour(Date startDate, Date endDate) {
         this.startTime = startDate.getTime();
         this.endTime = endDate.getTime();
-        this.fromTo = startDate + " - " + endDate;
     }
 
     public long getStartTime() {
@@ -32,14 +30,6 @@ public class Hour {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
-    }
-
-    public String getFromTo() {
-        return fromTo;
-    }
-
-    public void setFromTo(String fromTo) {
-        this.fromTo = fromTo;
     }
 
     public boolean isOverlapping(Hour h){

@@ -15,6 +15,7 @@ import com.lksnext.parkingagarcia.domain.Reservation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainViewModel extends ViewModel {
     MutableLiveData<List<Reservation>> userReservations = new MutableLiveData<>(new ArrayList<>());
@@ -106,8 +107,9 @@ public class MainViewModel extends ViewModel {
         DataRepository.getInstance().editUserReservation(newReservation, origReservationId, new Callback() {
             @Override
             public void onSuccess(Object ... args) {
-                userReservations.getValue().remove(newReservation);
-                userReservations.getValue().add(newReservation);
+                List<Reservation> reservations = userReservations.getValue();
+                userReservations.setValue(reservations);
+                Log.d("MainViewModel", "reservations: " + reservations.size());
                 successMessage.setValue("Reservation edited");
             }
 
