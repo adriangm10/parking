@@ -82,4 +82,12 @@ public class ReservationCard extends RelativeLayout {
     public void setEditBtnOnClickListener(OnClickListener listener) {
         editBtn.setOnClickListener(listener);
     }
+
+    public void setCancelBtnVisibility(int visibility) {
+        cancelBtn.setVisibility(visibility);
+    }
+
+    public void setEditBtnVisibility(int visibility) {
+        editBtn.setVisibility(visibility);
+    }
 }

@@ -12,22 +12,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="YOUR RESERVATIONS"
+        android:text="MY RESERVATIONS"
         android:textSize="25sp"
         android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/orange"
-        />
+        android:textColor="@color/orange" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dropdown_menu"
+        android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTitle"
+        android:layout_marginTop="20dp" >
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_menu_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/orange"
+            android:inputType="none"
+            android:text="Active reservations"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ScrollView
         android:id="@+id/reservationsSV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_above="@id/divider"
-        android:layout_below="@id/tvTitle">
+        android:layout_below="@id/dropdown_menu">
 
         <LinearLayout
             android:id="@+id/reservationsList"
