@@ -180,4 +180,20 @@ public class DataRepository {
             }
         });
     }
+
+    public void sendEmail(String email, Callback callback) {
+        auth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Email sent");
+                callback.onSuccess();
+            } else {
+                Log.w(TAG, "Email failure", task.getException());
+                if (task.getException() instanceof FirebaseAuthException) {
+                    callback.onFailure(task.getException().getMessage(), ((FirebaseAuthException) task.getException()).getErrorCode());
+                } else {
+                    callback.onFailure(task.getException().getMessage(), "");
+                }
+            }
+        });
+    }
 }

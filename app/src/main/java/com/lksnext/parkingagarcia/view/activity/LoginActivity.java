@@ -34,6 +34,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        binding.forgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+
         loginViewModel.getErrorMessage().observe(this, error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         );

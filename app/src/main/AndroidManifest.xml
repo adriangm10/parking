@@ -23,6 +23,12 @@
         <activity
             android:name="com.lksnext.parkingagarcia.view.activity.MainActivity"
             android:exported="true" />
+        <activity
+            android:name="com.lksnext.parkingagarcia.view.activity.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.lksnext.parkingagarcia.view.activity.PasswordUpdatedActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
