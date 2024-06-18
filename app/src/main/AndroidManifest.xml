@@ -10,24 +10,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkingLKS">
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.RegisterActivity"
+            android:name=".view.activity.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.LoginActivity"
+            android:name=".view.activity.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.ForgotPasswordActivity"
+            android:name=".view.activity.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.PasswordUpdatedActivity"
+            android:name=".view.activity.PasswordUpdatedActivity"
             android:exported="false" />
     </application>
 

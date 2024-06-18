@@ -196,4 +196,9 @@ public class DataRepository {
             }
         });
     }
+
+    public void logout(Callback callback) {
+        auth.signOut();
+        callback.onSuccess();
+    }
 }

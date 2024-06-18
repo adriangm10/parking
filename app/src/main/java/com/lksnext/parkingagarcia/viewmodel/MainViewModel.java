@@ -22,6 +22,9 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<String> error = new MutableLiveData<>();
     MutableLiveData<String> successMessage = new MutableLiveData<>();
     MutableLiveData<List<Reservation>> reservationsForDate = new MutableLiveData<>(new ArrayList<>());
+    MutableLiveData<Boolean> isLoggedOut = new MutableLiveData<>(false);
+
+    private static final String TAG = "MainViewModel";
 
     public LiveData<List<Reservation>> getUserReservations() {
         return userReservations;
@@ -37,6 +40,10 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<List<Reservation>> getReservationsForDate() {
         return reservationsForDate;
+    }
+
+    public LiveData<Boolean> getIsLoggedOut() {
+        return isLoggedOut;
     }
 
     public void reserve(String date, String id, Place place, Date startDate, Date endDate) {
@@ -61,7 +68,7 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onSuccess(Object ... args) {
                 List<Reservation> rs = (List<Reservation>) args[0];
-                Log.d("MainViewModel", "Reservations for date: " + rs.size());
+                Log.d(TAG, "Reservations for date: " + rs.size());
                 reservationsForDate.setValue(rs);
             }
 
@@ -77,7 +84,7 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onSuccess(Object ... args) {
                 List<Reservation> rs = (List<Reservation>) args[0];
-                Log.d("MainViewModel", "User reservations: " + rs);
+                Log.d(TAG, "User reservations: " + rs);
                 userReservations.setValue(rs);
             }
 
@@ -109,8 +116,23 @@ public class MainViewModel extends ViewModel {
             public void onSuccess(Object ... args) {
                 List<Reservation> reservations = userReservations.getValue();
                 userReservations.setValue(reservations);
-                Log.d("MainViewModel", "reservations: " + reservations.size());
+                Log.d(TAG, "reservations: " + reservations.size());
                 successMessage.setValue("Reservation edited");
+            }
+
+            @Override
+            public void onFailure(String message, String errorCode) {
+                error.setValue(message);
+            }
+        });
+    }
+
+    public void logout() {
+        DataRepository.getInstance().logout(new Callback() {
+            @Override
+            public void onSuccess(Object ... args) {
+                Log.d(TAG, "User logged out");
+                isLoggedOut.setValue(true);
             }
 
             @Override

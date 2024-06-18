@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
     NavController navController;
     AppBarConfiguration appBarConfiguration;
 
+    public NavController getNavController() {
+        return navController;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.resFragment);
                 return true;
             } else if (itemId == R.id.person) {
-                //TODO
+                navController.navigate(R.id.profileFragment);
+                return true;
             }
             return false;
         });

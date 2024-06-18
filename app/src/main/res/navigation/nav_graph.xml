@@ -18,4 +18,18 @@
         android:label="Reservations"
         tools:layout="@layout/fragment_reservations">
     </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.lksnext.parkingagarcia.view.fragment.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.lksnext.parkingagarcia.view.fragment.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notifications">
+    </fragment>
 </navigation>
