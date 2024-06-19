@@ -1,4 +1,4 @@
-package com.lksnext.parkingagarcia;
+package com.lksnext.parkingagarcia.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.lksnext.parkingagarcia.R;
 
 public class ReservationCard extends RelativeLayout {
     private TextView placeText;

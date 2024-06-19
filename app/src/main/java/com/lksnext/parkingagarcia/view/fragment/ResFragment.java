@@ -1,12 +1,10 @@
 package com.lksnext.parkingagarcia.view.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
@@ -17,13 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingagarcia.R;
-import com.lksnext.parkingagarcia.ReservationCard;
+import com.lksnext.parkingagarcia.view.ReservationCard;
 import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.domain.Reservation;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
