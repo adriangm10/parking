@@ -1,6 +1,11 @@
 package com.lksnext.parkingagarcia.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -24,9 +29,11 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.R;
+import com.lksnext.parkingagarcia.domain.EndReservationReminderReceiver;
 import com.lksnext.parkingagarcia.domain.Hour;
 import com.lksnext.parkingagarcia.domain.Place;
 import com.lksnext.parkingagarcia.domain.Reservation;
+import com.lksnext.parkingagarcia.domain.StartReservationReminderReceiver;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -121,6 +128,22 @@ public class MainFragment extends Fragment {
         t.setText(null);
     }
 
+    private void scheduleStartReservationReminder(long startTimeInMillis, String id) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), StartReservationReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, startTimeInMillis - 1000 * 60 * 30, pendingIntent);
+    }
+
+    private void scheduleEndReservationReminder(long endTimeInMillis, String id) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), EndReservationReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endTimeInMillis - 1000 * 60 * 15, pendingIntent);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -161,9 +184,24 @@ public class MainFragment extends Fragment {
             picker.addOnPositiveButtonClickListener(selection -> {
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(selection);
-                year = cal.get(Calendar.YEAR);
-                month = cal.get(Calendar.MONTH) + 1;
-                dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+                if (startHour != null) {
+                    cal.set(year, month - 1, dayOfMonth, startHour, startMinute);
+                    if (cal.before(Calendar.getInstance())) {
+                        dateText.setError("Select a future date");
+                        Toast.makeText(getContext(), "Select a future date", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        dateText.setError(null);
+                    }
+                }
+
+                this.year = year;
+                this.month = month;
+                this.dayOfMonth = dayOfMonth;
                 dateText.setText(dayOfMonth + "/" + month + "/" + year);
                 if (startHour != null && endHour != null) {
                     mainViewModel.loadReservationsForDate(dayOfMonth + "/" + month + "/" + year);
@@ -186,8 +224,23 @@ public class MainFragment extends Fragment {
                     .build();
 
             picker.addOnPositiveButtonClickListener(view1 -> {
-                startHour = picker.getHour();
-                startMinute = picker.getMinute();
+                int startHour = picker.getHour();
+                int startMinute = picker.getMinute();
+
+                if (year != null && month != null && dayOfMonth != null) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year, month - 1, dayOfMonth, startHour, startMinute);
+                    if (cal.before(Calendar.getInstance())) {
+                        startTimeText.setError("Select a future time");
+                        Toast.makeText(getContext(), "Select a future time", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        startTimeText.setError(null);
+                    }
+                }
+
+                this.startHour = startHour;
+                this.startMinute = startMinute;
 
                 startTimeText.setText(String.format("%02d:%02d", startHour, startMinute));
                 endTimeText.setEnabled(true);
@@ -242,6 +295,8 @@ public class MainFragment extends Fragment {
             Pair<Date, Date> dates = getDates();
 
             mainViewModel.reserve(date, id, selectedPlace, dates.first, dates.second);
+            scheduleStartReservationReminder(dates.first.getTime(), id);
+            scheduleEndReservationReminder(dates.second.getTime(), id);
             resetFields();
         });
 

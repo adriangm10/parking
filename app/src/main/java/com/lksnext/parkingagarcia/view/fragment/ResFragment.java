@@ -1,5 +1,8 @@
 package com.lksnext.parkingagarcia.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingagarcia.R;
+import com.lksnext.parkingagarcia.domain.EndReservationReminderReceiver;
+import com.lksnext.parkingagarcia.domain.StartReservationReminderReceiver;
 import com.lksnext.parkingagarcia.view.ReservationCard;
 import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.domain.Reservation;
@@ -41,6 +46,17 @@ public class ResFragment extends Fragment {
             default:
                 return reservation -> true;
         }
+    }
+
+    private void cancelReservationReminder(Reservation reservation) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(getContext().ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), EndReservationReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), reservation.getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.cancel(pendingIntent);
+
+        intent = new Intent(getContext(), StartReservationReminderReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(getContext(), reservation.getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.cancel(pendingIntent);
     }
 
     private void generateReservationsCards(List<Reservation> reservationsList, LinearLayout reservations, String reservationOption) {
@@ -83,6 +99,7 @@ public class ResFragment extends Fragment {
                 reservationCard.setCancelBtnOnClickListener(v -> {
                     mainViewModel.cancelUserReservation(filteredReservationsList.get(finalI));
                     reservations.removeView(reservationCard);
+                    cancelReservationReminder(filteredReservationsList.get(finalI));
                 });
 
                 reservationCard.setEditBtnOnClickListener(v -> {
