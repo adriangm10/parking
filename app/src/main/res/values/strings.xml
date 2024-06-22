@@ -9,8 +9,8 @@
     <string name="fragment_end">End</string>
     <string name="buscar">Buscar plazas libres</string>
     <string-array name="reservation_options">
-        <item>Active reservations</item>
-        <item>Past reservations</item>
-        <item>All reservations</item>
+        <item>Active</item>
+        <item>Future</item>
+        <item>Last month</item>
     </string-array>
 </resources>

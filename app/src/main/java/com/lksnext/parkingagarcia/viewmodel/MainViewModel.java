@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parkingagarcia.data.DataRepository;
 import com.lksnext.parkingagarcia.domain.Callback;
 import com.lksnext.parkingagarcia.domain.Hour;
@@ -15,7 +16,6 @@ import com.lksnext.parkingagarcia.domain.Reservation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainViewModel extends ViewModel {
     MutableLiveData<List<Reservation>> userReservations = new MutableLiveData<>(new ArrayList<>());
@@ -23,6 +23,7 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<String> successMessage = new MutableLiveData<>();
     MutableLiveData<List<Reservation>> reservationsForDate = new MutableLiveData<>(new ArrayList<>());
     MutableLiveData<Boolean> isLoggedOut = new MutableLiveData<>(false);
+    MutableLiveData<FirebaseUser> user = new MutableLiveData<>(null);
 
     private static final String TAG = "MainViewModel";
 
@@ -44,6 +45,10 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsLoggedOut() {
         return isLoggedOut;
+    }
+
+    public LiveData<FirebaseUser> getUser() {
+        return user;
     }
 
     public void reserve(String date, String id, Place place, Date startDate, Date endDate) {
@@ -138,6 +143,21 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onFailure(String message, String errorCode) {
                 error.setValue(message);
+            }
+        });
+    }
+
+    public void retrieveUser() {
+        DataRepository.getInstance().getUser(new Callback() {
+            @Override
+            public void onSuccess(Object... args) {
+                user.setValue((FirebaseUser) args[0]);
+            }
+
+            @Override
+            public void onFailure(String error, String errorCode) {
+                Log.e(TAG, "Could not get username");
+                user.setValue(null);
             }
         });
     }

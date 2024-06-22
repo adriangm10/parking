@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.textview.MaterialTextView;
 import com.lksnext.parkingagarcia.R;
 import com.lksnext.parkingagarcia.view.activity.AccountActivity;
 import com.lksnext.parkingagarcia.view.activity.ChangePasswordActivity;
@@ -34,6 +35,13 @@ public class ProfileFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
+        mainViewModel.retrieveUser();
+        mainViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
+            if (user != null) {
+                ((MaterialTextView) view.findViewById(R.id.tvTitle)).setText(user.getDisplayName());
+            }
+        });
+
         view.findViewById(R.id.btnLogout).setOnClickListener(v ->
             mainViewModel.logout()
         );
@@ -47,10 +55,6 @@ public class ProfileFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AccountActivity.class);
             startActivity(intent);
         });
-
-        view.findViewById(R.id.btnNotifications).setOnClickListener(v ->
-            ((MainActivity) getActivity()).getNavController().navigate(R.id.notificationsFragment)
-        );
 
         mainViewModel.getIsLoggedOut().observe(getViewLifecycleOwner(), isLoggedOut -> {
             if (isLoggedOut) {

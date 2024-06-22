@@ -194,8 +194,6 @@ public class MainFragment extends Fragment {
                         dateText.setError("Select a future date");
                         Toast.makeText(getContext(), "Select a future date", Toast.LENGTH_SHORT).show();
                         return;
-                    } else {
-                        dateText.setError(null);
                     }
                 }
 
@@ -203,6 +201,7 @@ public class MainFragment extends Fragment {
                 this.month = month;
                 this.dayOfMonth = dayOfMonth;
                 dateText.setText(dayOfMonth + "/" + month + "/" + year);
+                dateText.setError(null);
                 if (startHour != null && endHour != null) {
                     mainViewModel.loadReservationsForDate(dayOfMonth + "/" + month + "/" + year);
                 }

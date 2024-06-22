@@ -39,10 +39,12 @@ public class ResFragment extends Fragment {
 
     private Predicate<Reservation> reservationsFilter(String reservationOption) {
         switch (reservationOption) {
-            case "Past reservations":
-                return reservation -> reservation.getHour().getStartTime() < System.currentTimeMillis();
-            case "Active reservations":
+            case "Last month":
+                return reservation -> reservation.getHour().getStartTime() > System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000;
+            case "Future":
                 return reservation -> reservation.getHour().getStartTime() > System.currentTimeMillis();
+            case "Active":
+                return reservation -> reservation.getHour().getStartTime() < System.currentTimeMillis() && reservation.getHour().getEndTime() > System.currentTimeMillis();
             default:
                 return reservation -> true;
         }
@@ -118,6 +120,7 @@ public class ResFragment extends Fragment {
         LinearLayout reservations = view.findViewById(R.id.reservationsList);
 
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getContext(), R.array.reservation_options, android.R.layout.simple_dropdown_item_1line);
+        ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setText(arrayAdapter.getItem(0));
         ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setAdapter(arrayAdapter);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);

@@ -201,4 +201,59 @@ public class DataRepository {
         auth.signOut();
         callback.onSuccess();
     }
+
+    public void getUser(Callback callback) {
+        callback.onSuccess(auth.getCurrentUser());
+    }
+
+    public void updateUser(String username, String email, Callback callback) {
+        FirebaseUser user = auth.getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(username)
+                .build();
+
+        user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "User name updated.");
+                user.verifyBeforeUpdateEmail(email).addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        Log.d(TAG, "User email updated.");
+                        callback.onSuccess();
+                    } else {
+                        Log.w(TAG, "Update email failure", task1.getException());
+                        if (task1.getException() instanceof FirebaseAuthException) {
+                            callback.onFailure(task1.getException().getMessage(), ((FirebaseAuthException) task1.getException()).getErrorCode());
+                        } else {
+                            callback.onFailure(task1.getException().getMessage(), "");
+                        }
+                    }
+                });
+            } else {
+                Log.w(TAG, "Update profile failure", task.getException());
+                if (task.getException() instanceof FirebaseAuthException) {
+                    callback.onFailure(task.getException().getMessage(), ((FirebaseAuthException) task.getException()).getErrorCode());
+                } else {
+                    callback.onFailure(task.getException().getMessage(), "");
+                }
+            }
+        });
+    }
+
+    public void changePassword(String password, Callback callback) {
+        FirebaseUser user = auth.getCurrentUser();
+        user.updatePassword(password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "User password updated.");
+                callback.onSuccess();
+            } else {
+                Log.w(TAG, "Update password failure", task.getException());
+                if (task.getException() instanceof FirebaseAuthException) {
+                    callback.onFailure(task.getException().getMessage(), ((FirebaseAuthException) task.getException()).getErrorCode());
+                } else {
+                    callback.onFailure(task.getException().getMessage(), "");
+                }
+            }
+        });
+    }
 }

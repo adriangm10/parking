@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,19 +50,6 @@
             android:cursorVisible="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:layout_marginTop="10dp"/>
-
-        <EditText
-            android:id="@+id/btnNotifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=" Notifications"
-            android:drawableStart="@drawable/ic_bell"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:textSize="20sp"
             android:layout_marginTop="10dp"/>
 
         <EditText
