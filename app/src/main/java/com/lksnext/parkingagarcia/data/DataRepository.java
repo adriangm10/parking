@@ -78,7 +78,7 @@ public class DataRepository {
 
     public void reserve(Reservation reservation, Callback callback) {
         callback.onSuccess();
-        reservation.setUser(auth.getCurrentUser().getDisplayName());
+        reservation.setUser(auth.getCurrentUser().getEmail());
 
         db.collection("reservations")
                 .document()
@@ -115,7 +115,7 @@ public class DataRepository {
 
     public void getUserReservations(Callback callback) {
         db.collection("reservations")
-                .whereEqualTo("user", auth.getCurrentUser().getDisplayName())
+                .whereEqualTo("user", auth.getCurrentUser().getEmail())
                 .get()
                 .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -206,7 +206,7 @@ public class DataRepository {
         callback.onSuccess(auth.getCurrentUser());
     }
 
-    public void updateUser(String username, String email, Callback callback) {
+    public void updateUser(String username, Callback callback) {
         FirebaseUser user = auth.getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -216,26 +216,10 @@ public class DataRepository {
         user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "User name updated.");
-                user.verifyBeforeUpdateEmail(email).addOnCompleteListener(task1 -> {
-                    if (task1.isSuccessful()) {
-                        Log.d(TAG, "User email updated.");
-                        callback.onSuccess();
-                    } else {
-                        Log.w(TAG, "Update email failure", task1.getException());
-                        if (task1.getException() instanceof FirebaseAuthException) {
-                            callback.onFailure(task1.getException().getMessage(), ((FirebaseAuthException) task1.getException()).getErrorCode());
-                        } else {
-                            callback.onFailure(task1.getException().getMessage(), "");
-                        }
-                    }
-                });
+                callback.onSuccess();
             } else {
                 Log.w(TAG, "Update profile failure", task.getException());
-                if (task.getException() instanceof FirebaseAuthException) {
-                    callback.onFailure(task.getException().getMessage(), ((FirebaseAuthException) task.getException()).getErrorCode());
-                } else {
-                    callback.onFailure(task.getException().getMessage(), "");
-                }
+                callback.onFailure(task.getException().getMessage(), "");
             }
         });
     }

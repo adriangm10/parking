@@ -41,18 +41,15 @@ public class AccountActivity extends AppCompatActivity {
 
         binding.okBtn.setOnClickListener(v -> {
             String name = binding.nameText.getText().toString();
-            String email = binding.emailText.getText().toString();
-            accountViewModel.updateUser(name, email);
+            accountViewModel.updateUser(name);
         });
 
         accountViewModel.getSuccess().observe(this, success -> {
             if (success) {
-                Toast.makeText(this, "A verification email has been sent to your new email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Your profile has been updated", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
-
-        accountViewModel.getEmailError().observe(this, binding.emailText::setError);
 
         accountViewModel.getNameError().observe(this, binding.nameText::setError);
 

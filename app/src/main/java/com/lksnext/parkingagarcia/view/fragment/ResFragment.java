@@ -18,11 +18,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingagarcia.R;
+import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.domain.EndReservationReminderReceiver;
+import com.lksnext.parkingagarcia.domain.Reservation;
 import com.lksnext.parkingagarcia.domain.StartReservationReminderReceiver;
 import com.lksnext.parkingagarcia.view.ReservationCard;
-import com.lksnext.parkingagarcia.Utils;
-import com.lksnext.parkingagarcia.domain.Reservation;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -40,7 +40,8 @@ public class ResFragment extends Fragment {
     private Predicate<Reservation> reservationsFilter(String reservationOption) {
         switch (reservationOption) {
             case "Last month":
-                return reservation -> reservation.getHour().getStartTime() > System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000;
+                return reservation -> reservation.getHour().getStartTime() > System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000 &&
+                        reservation.getHour().getEndTime() < System.currentTimeMillis();
             case "Future":
                 return reservation -> reservation.getHour().getStartTime() > System.currentTimeMillis();
             case "Active":
