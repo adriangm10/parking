@@ -78,7 +78,7 @@ public class DataRepository {
 
     public void reserve(Reservation reservation, Callback callback) {
         callback.onSuccess();
-        reservation.setUser(auth.getCurrentUser().getEmail());
+        reservation.setUser(auth.getCurrentUser().getUid());
 
         db.collection("reservations")
                 .document()
@@ -115,7 +115,7 @@ public class DataRepository {
 
     public void getUserReservations(Callback callback) {
         db.collection("reservations")
-                .whereEqualTo("user", auth.getCurrentUser().getEmail())
+                .whereEqualTo("user", auth.getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -206,7 +206,7 @@ public class DataRepository {
         callback.onSuccess(auth.getCurrentUser());
     }
 
-    public void updateUser(String username, Callback callback) {
+    public void updateUser(String username, String email, Callback callback) {
         FirebaseUser user = auth.getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -216,7 +216,16 @@ public class DataRepository {
         user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "User name updated.");
-                callback.onSuccess();
+                if (!user.getEmail().equals(email)) {
+                    user.verifyBeforeUpdateEmail(email).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Log.d(TAG, "User email updated.");
+                            callback.onSuccess("An email has been sent to the new email address for verification, you might need to log in again.");
+                        } else {
+                            callback.onFailure(task1.getException().getMessage(), "");
+                        }
+                    });
+                } else callback.onSuccess("User updated");
             } else {
                 Log.w(TAG, "Update profile failure", task.getException());
                 callback.onFailure(task.getException().getMessage(), "");

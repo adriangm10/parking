@@ -12,9 +12,9 @@ import com.lksnext.parkingagarcia.domain.Callback;
 
 public class AccountViewModel extends ViewModel {
     MutableLiveData<String> nameError = new MutableLiveData<>();
+    MutableLiveData<String> emailError = new MutableLiveData<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
     MutableLiveData<String> successMessage = new MutableLiveData<>();
-    MutableLiveData<Boolean> success = new MutableLiveData<>(false);
     MutableLiveData<FirebaseUser> user = new MutableLiveData<>(null);
 
     public LiveData<String> getNameError() {
@@ -29,12 +29,12 @@ public class AccountViewModel extends ViewModel {
         return successMessage;
     }
 
-    public LiveData<Boolean> getSuccess() {
-        return success;
-    }
-
     public LiveData<FirebaseUser> getUser() {
         return user;
+    }
+
+    public LiveData<String> getEmailError() {
+        return emailError;
     }
 
     public void retrieveUser() {
@@ -51,24 +51,32 @@ public class AccountViewModel extends ViewModel {
         });
     }
     
-    public void updateUser(String username) {
+    public void updateUser(String username, String email) {
+        boolean tmp = false;
         if (username == null || username.isEmpty()){
             nameError.setValue("Name is required");
-            return;
+            tmp = true;
         }
+        if (email == null || email.isEmpty()){
+            nameError.setValue("Email is required");
+            tmp = true;
+        }
+        if (tmp) return;
 
-        DataRepository.getInstance().updateUser(username, new Callback() {
+        DataRepository.getInstance().updateUser(username, email, new Callback() {
             @Override
             public void onSuccess(Object ... args) {
-                success.setValue(true);
-                successMessage.setValue("User updated");
+                successMessage.setValue(args[0].toString());
             }
 
             @Override
             public void onFailure(String error, String errorCode) {
-                success.setValue(false);
+                successMessage.setValue(null);
                 Log.d("AccountViewModel", "Error updating user: " + error);
-                errorMessage.setValue(error);
+                if (error.contains("INVALID_NEW_EMAIL"))
+                    emailError.setValue("Invalid email");
+                else
+                    errorMessage.setValue(error);
             }
         });
     }
