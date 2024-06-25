@@ -104,7 +104,9 @@ public class MainViewModel extends ViewModel {
         DataRepository.getInstance().cancelUserReservation(r, new Callback() {
             @Override
             public void onSuccess(Object ... args) {
-                userReservations.getValue().remove(r);
+                List<Reservation> reservations = userReservations.getValue();
+                reservations.remove(r);
+                userReservations.setValue(reservations);
                 successMessage.setValue("Reservation canceled");
             }
 

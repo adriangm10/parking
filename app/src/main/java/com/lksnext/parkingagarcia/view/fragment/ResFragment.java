@@ -101,7 +101,6 @@ public class ResFragment extends Fragment {
             } else {
                 reservationCard.setCancelBtnOnClickListener(v -> {
                     mainViewModel.cancelUserReservation(filteredReservationsList.get(finalI));
-                    reservations.removeView(reservationCard);
                     cancelReservationReminder(filteredReservationsList.get(finalI));
                 });
 

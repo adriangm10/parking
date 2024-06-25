@@ -134,7 +134,7 @@ public class DataRepository {
     public void cancelUserReservation(Reservation reservation, Callback callback) {
         db.collection("reservations")
                 .whereEqualTo("id", reservation.getId())
-                .whereEqualTo("user", auth.getCurrentUser().getDisplayName())
+                .whereEqualTo("user", auth.getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -159,7 +159,7 @@ public class DataRepository {
     public void editUserReservation(Reservation newReservation, String origReservation, Callback callback) {
         db.collection("reservations")
                 .whereEqualTo("id", origReservation)
-                .whereEqualTo("user", auth.getCurrentUser().getDisplayName())
+                .whereEqualTo("user", auth.getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
