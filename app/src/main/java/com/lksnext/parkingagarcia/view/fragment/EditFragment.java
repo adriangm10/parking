@@ -209,6 +209,10 @@ public class EditFragment extends DialogFragment {
         });
 
         view.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            if (selectedPlace == null) {
+                Toast.makeText(getContext(), "Select a place", Toast.LENGTH_SHORT).show();
+                return;
+            }
             reservation.setPlace(selectedPlace);
             reservation.setDate(((EditText) view.findViewById(R.id.dateText)).getText().toString());
             Pair<Date, Date> dates = getDates();
@@ -226,7 +230,7 @@ public class EditFragment extends DialogFragment {
             Pair<Date, Date> dates = getDates();
             for (Reservation r : reservations) {
                 Log.d("MainFragment", "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
-                if (r.getHour().isOverlapping(new Hour(dates.first, dates.second))) {
+                if (r.getHour().isOverlapping(new Hour(dates.first, dates.second)) && !reservation.getId().equals(r.getId())) {
                     Log.d("MainFragment", "Disabling place " + (int) r.getPlace().getId());
                     MaterialButton btn = view.findViewById((int) r.getPlace().getId());
                     Log.d("MainFragment", "Button: " + btn.getText());
