@@ -3,24 +3,19 @@ package com.lksnext.parkingagarcia;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import static com.google.common.base.CharMatcher.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
 import static java.lang.Thread.sleep;
 
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 
 import androidx.test.espresso.matcher.RootMatchers;
@@ -28,11 +23,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.lksnext.parkingagarcia.data.DataRepository;
-import com.lksnext.parkingagarcia.domain.Callback;
 import com.lksnext.parkingagarcia.view.activity.MainActivity;
 
 import org.junit.After;
@@ -46,13 +37,11 @@ import org.junit.runner.RunWith;
 public class MainFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
-    private MainActivity activity;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private static final String TAG = "MainFragmentTest";
 
     @Before
     public void setUp() {
-        activityRule.getScenario().onActivity(activity -> this.activity = activity);
         auth.createUserWithEmailAndPassword("test@test.com", "test1234").addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "User created");
