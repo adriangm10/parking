@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.util.Pair;
@@ -50,11 +51,10 @@ public class EditFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static EditFragment newInstance(Reservation reservation, MainViewModel mainViewModel) {
+    public static EditFragment newInstance(Reservation reservation) {
         EditFragment fragment = new EditFragment();
         fragment.reservation = reservation;
         fragment.selectedPlace = reservation.getPlace();
-        fragment.mainViewModel = mainViewModel;
         fragment.dayOfMonth = Integer.valueOf(reservation.getDate().split("/")[0]);
         fragment.month = Integer.valueOf(reservation.getDate().split("/")[1]);
         fragment.year = Integer.valueOf(reservation.getDate().split("/")[2]);
@@ -119,6 +119,7 @@ public class EditFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_edit, container, false);
+        mainViewModel = new ViewModelProvider(requireParentFragment()).get(MainViewModel.class);
 
         Locale l = getResources().getConfiguration().getLocales().get(0);
         startHour = Integer.valueOf(Utils.formatTimeToHHmm(reservation.getHour().getStartTime(), l).substring(0, 2));

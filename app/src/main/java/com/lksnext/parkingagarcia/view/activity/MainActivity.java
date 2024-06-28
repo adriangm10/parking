@@ -3,6 +3,7 @@ package com.lksnext.parkingagarcia.view.activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -11,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parkingagarcia.R;
 import com.lksnext.parkingagarcia.databinding.ActivityMainBinding;
+import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     NavController navController;
     AppBarConfiguration appBarConfiguration;
+    MainViewModel mainViewModel;
 
     public NavController getNavController() {
         return navController;
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.loadUserReservations();
 
         //Con el NavigationHost podremos movernos por distintas pestañas dentro de la misma pantalla
         NavHostFragment navHostFragment =

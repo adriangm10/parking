@@ -107,7 +107,7 @@ public class ResFragment extends Fragment {
                 });
 
                 reservationCard.setEditBtnOnClickListener(v -> {
-                    EditFragment editFragment = EditFragment.newInstance(filteredReservationsList.get(finalI), mainViewModel);
+                    EditFragment editFragment = EditFragment.newInstance(filteredReservationsList.get(finalI));
                     editFragment.show(getParentFragmentManager(), "editFragment");
                 });
             }
@@ -125,8 +125,7 @@ public class ResFragment extends Fragment {
         ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setText(arrayAdapter.getItem(0));
         ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setAdapter(arrayAdapter);
 
-        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        mainViewModel.loadUserReservations();
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setOnItemClickListener((parent, view, position, id) -> {
             String selectedOption = parent.getItemAtPosition(position).toString();
