@@ -23,21 +23,28 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ScrollView
-        android:id="@+id/reservationsSV"
-        android:layout_width="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_above="@id/divider"
-        android:layout_below="@id/dropdown_menu">
-
-        <LinearLayout
-            android:id="@+id/reservationsList"
+        android:layout_below="@id/dropdown_menu"
+        android:layout_above="@id/divider">
+        <ScrollView
+            android:id="@+id/reservationsSV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:layout_marginTop="20dp"
+            android:layout_above="@id/divider"
+            android:layout_below="@id/dropdown_menu">
 
-    </ScrollView>
+            <LinearLayout
+                android:id="@+id/reservationsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View android:layout_width="match_parent"
         android:id="@+id/divider"

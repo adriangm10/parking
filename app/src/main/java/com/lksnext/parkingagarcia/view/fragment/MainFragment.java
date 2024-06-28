@@ -301,16 +301,24 @@ public class MainFragment extends Fragment {
             resetFields();
         });
 
-        mainViewModel.getError().observe(getViewLifecycleOwner(), error ->
-            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show()
-        );
+        mainViewModel.getError().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                mainViewModel.getError().setValue(null);
+            }
+        });
 
-        mainViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success ->
-            Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show()
-        );
+        mainViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), success -> {
+            if (success != null) {
+                Toast.makeText(getContext(), success, Toast.LENGTH_SHORT).show();
+                mainViewModel.getSuccessMessage().setValue(null);
+            }
+        });
 
         mainViewModel.getReservationsForDate().observe(getViewLifecycleOwner(), reservations -> {
+            if (reservations == null) return;
             Pair<Date, Date> dates = getDates();
+            if (dates == null) return;
             for (Reservation r : reservations) {
                 Log.d(TAG, "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
                 if (r.getHour().isOverlapping(new Hour(dates.first, dates.second))) {

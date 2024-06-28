@@ -77,7 +77,6 @@ public class DataRepository {
     }
 
     public void reserve(Reservation reservation, Callback callback) {
-        callback.onSuccess();
         reservation.setUser(auth.getCurrentUser().getUid());
 
         db.collection("reservations")

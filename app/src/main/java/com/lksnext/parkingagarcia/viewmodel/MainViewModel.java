@@ -27,27 +27,27 @@ public class MainViewModel extends ViewModel {
 
     private static final String TAG = "MainViewModel";
 
-    public LiveData<List<Reservation>> getUserReservations() {
+    public MutableLiveData<List<Reservation>> getUserReservations() {
         return userReservations;
     }
 
-    public LiveData<String> getError() {
+    public MutableLiveData<String> getError() {
         return error;
     }
 
-    public LiveData<String> getSuccessMessage() {
+    public MutableLiveData<String> getSuccessMessage() {
         return successMessage;
     }
 
-    public LiveData<List<Reservation>> getReservationsForDate() {
+    public MutableLiveData<List<Reservation>> getReservationsForDate() {
         return reservationsForDate;
     }
 
-    public LiveData<Boolean> getIsLoggedOut() {
+    public MutableLiveData<Boolean> getIsLoggedOut() {
         return isLoggedOut;
     }
 
-    public LiveData<FirebaseUser> getUser() {
+    public MutableLiveData<FirebaseUser> getUser() {
         return user;
     }
 
@@ -57,7 +57,6 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onSuccess(Object ... args) {
                 userReservations.getValue().add(r);
-                userReservations.setValue(userReservations.getValue());
                 successMessage.setValue("Reservation successful");
             }
 

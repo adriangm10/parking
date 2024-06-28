@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lksnext.parkingagarcia.R;
 import com.lksnext.parkingagarcia.Utils;
@@ -138,10 +139,24 @@ public class ResFragment extends Fragment {
             generateReservationsCards(reservationsList, reservations, selectedOption);
         });
 
-        mainViewModel.getError().observe(getViewLifecycleOwner(), error -> Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show());
+        mainViewModel.getError().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                mainViewModel.getError().setValue(null);
+            }
+        });
 
-        mainViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), message -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show());
+        mainViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                mainViewModel.getSuccessMessage().setValue(null);
+            }
+        });
 
+        ((SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh)).setOnRefreshListener(() -> {
+            mainViewModel.loadUserReservations();
+            ((SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh)).setRefreshing(false);
+        });
         return view;
     }
 }
