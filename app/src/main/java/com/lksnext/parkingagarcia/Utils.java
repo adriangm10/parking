@@ -50,8 +50,9 @@ public class Utils {
                         break;
                 }
 
-                btn.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_START);
-                btn.setIconSize(60);
+                btn.setIconGravity(MaterialButton.ICON_GRAVITY_TEXT_TOP);
+                btn.setIconSize(70);
+                btn.setTextSize(18);
                 btn.setId((int) place.getId());
                 btn.setOnClickListener(listener);
                 container.addView(btn);

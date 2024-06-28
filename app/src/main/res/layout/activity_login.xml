@@ -8,11 +8,11 @@
 
     <Button
         android:id="@+id/loginButton"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:text="Login"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,9 +66,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
         style="@style/Theme.ParkingLKS.TextInputLayout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="75dp"
         android:hint="Email*"
         android:inputType="textEmailAddress"
         app:errorEnabled="true"
@@ -86,8 +87,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
         style="@style/Theme.ParkingLKS.TextInputLayout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
         android:layout_marginTop="16dp"
         android:hint="Password*"
         android:inputType="textPassword"

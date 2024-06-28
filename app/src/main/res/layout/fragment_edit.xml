@@ -111,11 +111,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rlDateTime"
+        android:layout_above="@id/llButtons"
         android:layout_centerHorizontal="true">
 
         <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="300dp">
+            android:layout_height="wrap_content">
 
             <GridLayout
                 android:id="@+id/glParking"
@@ -128,28 +129,37 @@
     </HorizontalScrollView>
 
     <LinearLayout
+        android:id="@+id/llButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/svParking"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/divider"
         android:gravity="center">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:text="CANCEL"
             android:scrollbars="vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConfirm"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:text="CONFIRM"
             android:scrollbars="vertical"/>
 
     </LinearLayout>
+
+    <View android:layout_width="match_parent"
+        android:id="@+id/divider"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp" />
 
 </RelativeLayout>

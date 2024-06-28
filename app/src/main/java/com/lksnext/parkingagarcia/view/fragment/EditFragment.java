@@ -33,6 +33,7 @@ import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class EditFragment extends DialogFragment {
@@ -57,6 +58,26 @@ public class EditFragment extends DialogFragment {
         fragment.month = Integer.valueOf(reservation.getDate().split("/")[1]);
         fragment.year = Integer.valueOf(reservation.getDate().split("/")[2]);
         return fragment;
+    }
+
+    private void disablePlaces(List<Reservation> reservations) {
+        Pair<Date, Date> dates = getDates();
+        for (Reservation r : reservations) {
+            Log.d("MainFragment", "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
+            if (r.getHour().isOverlapping(new Hour(dates.first, dates.second)) && !reservation.getId().equals(r.getId())) {
+                Log.d("MainFragment", "Disabling place " + (int) r.getPlace().getId());
+                MaterialButton btn = view.findViewById((int) r.getPlace().getId());
+                Log.d("MainFragment", "Button: " + btn.getText());
+                btn.setEnabled(false);
+                if (selectedButton != null && btn.getId() == selectedButton.getId()) {
+                    selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
+                    selectedButton = null;
+                    selectedPlace = null;
+                }
+            } else {
+                view.findViewById((int) r.getPlace().getId()).setEnabled(true);
+            }
+        }
     }
 
     private Pair<Date, Date> getDates() {
@@ -226,25 +247,8 @@ public class EditFragment extends DialogFragment {
 
         view.findViewById(R.id.btnCancel).setOnClickListener(v -> dismiss());
 
-        mainViewModel.getReservationsForDate().observe(getViewLifecycleOwner(), reservations -> {
-            Pair<Date, Date> dates = getDates();
-            for (Reservation r : reservations) {
-                Log.d("MainFragment", "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
-                if (r.getHour().isOverlapping(new Hour(dates.first, dates.second)) && !reservation.getId().equals(r.getId())) {
-                    Log.d("MainFragment", "Disabling place " + (int) r.getPlace().getId());
-                    MaterialButton btn = view.findViewById((int) r.getPlace().getId());
-                    Log.d("MainFragment", "Button: " + btn.getText());
-                    btn.setEnabled(false);
-                    if (selectedButton != null && btn.getId() == selectedButton.getId()) {
-                        selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));
-                        selectedButton = null;
-                        selectedPlace = null;
-                    }
-                } else {
-                    view.findViewById((int) r.getPlace().getId()).setEnabled(true);
-                }
-            }
-        });
+        mainViewModel.getReservationsForDate().observe(getViewLifecycleOwner(), this::disablePlaces);
+        mainViewModel.loadReservationsForDate(reservation.getDate());
 
         return view;
     }
