@@ -14,8 +14,8 @@ import com.lksnext.parkingagarcia.databinding.ActivityLoginBinding;
 import com.lksnext.parkingagarcia.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding binding;
-    private LoginViewModel loginViewModel;
+    ActivityLoginBinding binding;
+    LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

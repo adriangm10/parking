@@ -12,8 +12,8 @@ import com.lksnext.parkingagarcia.viewmodel.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private ActivityRegisterBinding binding;
-    private RegisterViewModel registerViewModel;
+    ActivityRegisterBinding binding;
+    RegisterViewModel registerViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

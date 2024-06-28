@@ -2,6 +2,7 @@ package com.lksnext.parkingagarcia.view.fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ResFragment extends Fragment {
-    private View view;
+    View view;
     private MainViewModel mainViewModel;
 
     public ResFragment() {
@@ -52,7 +53,8 @@ public class ResFragment extends Fragment {
     }
 
     private void cancelReservationReminder(Reservation reservation) {
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(getContext().ALARM_SERVICE);
+        getContext();
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), EndReservationReminderReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), reservation.getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);

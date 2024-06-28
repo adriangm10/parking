@@ -13,6 +13,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Utils {
+
+    private Utils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static Place[][] parking = {
             {new Place(1, Place.Type.ELECTRIC), new Place(2, Place.Type.ELECTRIC), new Place(3, Place.Type.ELECTRIC), new Place(4, Place.Type.ELECTRIC), new Place(5, Place.Type.ELECTRIC), new Place(6, Place.Type.ELECTRIC), new Place(7, Place.Type.ELECTRIC), new Place(8, Place.Type.ELECTRIC), new Place(9, Place.Type.ELECTRIC), new Place(10, Place.Type.ELECTRIC)},
             {new Place(11, Place.Type.DISABLED), new Place(12, Place.Type.NORMAL), new Place(13, Place.Type.NORMAL), new Place(14, Place.Type.NORMAL), new Place(15, Place.Type.NORMAL), new Place(16, Place.Type.NORMAL), new Place(17, Place.Type.NORMAL), new Place(18, Place.Type.NORMAL), new Place(19, Place.Type.NORMAL), new Place(20, Place.Type.DISABLED)},

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.lksnext.parkingagarcia.databinding.ActivityPasswordUpdatedBinding;
 
 public class PasswordUpdatedActivity extends AppCompatActivity  {
-    private ActivityPasswordUpdatedBinding binding;
+    ActivityPasswordUpdatedBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

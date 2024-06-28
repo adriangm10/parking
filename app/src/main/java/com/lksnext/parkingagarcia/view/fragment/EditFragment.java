@@ -44,6 +44,7 @@ public class EditFragment extends DialogFragment {
     private Place selectedPlace;
     private MainViewModel mainViewModel;
     private Integer startHour, startMinute, endHour, endMinute, year, month, dayOfMonth;
+    private static final String TAG = "EditFragment";
 
     public EditFragment() {
         // Required empty public constructor
@@ -63,11 +64,11 @@ public class EditFragment extends DialogFragment {
     private void disablePlaces(List<Reservation> reservations) {
         Pair<Date, Date> dates = getDates();
         for (Reservation r : reservations) {
-            Log.d("MainFragment", "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
+            Log.d(TAG, "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
             if (r.getHour().isOverlapping(new Hour(dates.first, dates.second)) && !reservation.getId().equals(r.getId())) {
-                Log.d("MainFragment", "Disabling place " + (int) r.getPlace().getId());
+                Log.d(TAG, "Disabling place " + (int) r.getPlace().getId());
                 MaterialButton btn = view.findViewById((int) r.getPlace().getId());
-                Log.d("MainFragment", "Button: " + btn.getText());
+                Log.d(TAG, "Button: " + btn.getText());
                 btn.setEnabled(false);
                 if (selectedButton != null && btn.getId() == selectedButton.getId()) {
                     selectedButton.setStrokeColor(ColorStateList.valueOf(getResources().getColor(com.google.android.material.R.color.material_grey_300, null)));

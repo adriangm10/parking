@@ -52,7 +52,7 @@ public class MainViewModelTest {
             }
         });
         sleep(2000);
-        assertEquals(auth.getCurrentUser().getEmail(), "test@test.com");
+        assertEquals("test@test.com", auth.getCurrentUser().getEmail());
     }
 
     @After

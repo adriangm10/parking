@@ -11,8 +11,8 @@ import com.lksnext.parkingagarcia.databinding.ActivityForgotPasswordBinding;
 import com.lksnext.parkingagarcia.viewmodel.ForgotPasswordViewModel;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
-    private ActivityForgotPasswordBinding binding;
-    private ForgotPasswordViewModel forgotPasswordViewModel;
+    ActivityForgotPasswordBinding binding;
+    ForgotPasswordViewModel forgotPasswordViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
