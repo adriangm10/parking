@@ -23,7 +23,12 @@ public class MainViewModel extends ViewModel {
     MutableLiveData<String> successMessage = new MutableLiveData<>();
     MutableLiveData<List<Reservation>> reservationsForDate = new MutableLiveData<>(new ArrayList<>());
     MutableLiveData<Boolean> isLoggedOut = new MutableLiveData<>(false);
-    MutableLiveData<FirebaseUser> user = new MutableLiveData<>(null);
+    MutableLiveData<FirebaseUser> user = new MutableLiveData<>();
+    MutableLiveData<String> startTime = new MutableLiveData<>();
+    MutableLiveData<String> endTime = new MutableLiveData<>();
+    MutableLiveData<String> date = new MutableLiveData<>();
+    MutableLiveData<String> filter = new MutableLiveData<>();
+    MutableLiveData<Long> selectedPlace = new MutableLiveData<>();
 
     private static final String TAG = "MainViewModel";
 
@@ -50,6 +55,42 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<FirebaseUser> getUser() {
         return user;
     }
+
+    public MutableLiveData<String> getStartTime() {
+        return startTime;
+    }
+
+    public LiveData<String> getEndTime() {
+        return endTime;
+    }
+
+    public LiveData<String> getDate() {
+        return date;
+    }
+
+    public LiveData<String> getFilter() {
+        return filter;
+    }
+
+    public LiveData<Long> getSelectedPlace() { return selectedPlace; }
+
+    public void setStartTime(String startTime) {
+        this.startTime.setValue(startTime);
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime.setValue(endTime);
+    }
+
+    public void setDate(String date) {
+        this.date.setValue(date);
+    }
+
+    public void setFilter(String filter) {
+        this.filter.setValue(filter);
+    }
+
+    public void setSelectedPlace(Long place) { selectedPlace.setValue(place); }
 
     public void reserve(String date, String id, Place place, Date startDate, Date endDate) {
         Reservation r = new Reservation(date, id, place, new Hour(startDate, endDate));

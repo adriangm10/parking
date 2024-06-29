@@ -152,6 +152,27 @@ public class MainFragment extends Fragment {
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
+        if (mainViewModel.getDate().getValue() != null) {
+            ((EditText) view.findViewById(R.id.dateText)).setText(mainViewModel.getDate().getValue());
+            String[] date = mainViewModel.getDate().getValue().split("/");
+            this.year = Integer.parseInt(date[2]);
+            this.month = Integer.parseInt(date[1]);
+            this.dayOfMonth = Integer.parseInt(date[0]);
+        }
+        if (mainViewModel.getStartTime().getValue() != null) {
+            ((EditText) view.findViewById(R.id.startTimeText)).setText(mainViewModel.getStartTime().getValue());
+            view.findViewById(R.id.endTimeText).setEnabled(true);
+            String[] time = mainViewModel.getStartTime().getValue().split(":");
+            this.startMinute = Integer.parseInt(time[1]);
+            this.startHour = Integer.parseInt(time[0]);
+        }
+        if (mainViewModel.getEndTime().getValue() != null) {
+            ((EditText) view.findViewById(R.id.endTimeText)).setText(mainViewModel.getEndTime().getValue());
+            String[] time = mainViewModel.getEndTime().getValue().split(":");
+            this.endMinute = Integer.parseInt(time[1]);
+            this.endHour = Integer.parseInt(time[0]);
+        }
+
         GridLayout glParking = view.findViewById(R.id.glParking);
         glParking.setRowCount(Utils.getParking().length);
         glParking.setColumnCount(Utils.getParking()[0].length);
@@ -165,6 +186,11 @@ public class MainFragment extends Fragment {
             selectedButton = btn;
             selectedPlace = Utils.getParking()[(btn.getId() - 1) / 10][(btn.getId() - 1) % 10];
         }, this);
+
+        if (mainViewModel.getSelectedPlace().getValue() != null) {
+            MaterialButton btn = view.findViewById(mainViewModel.getSelectedPlace().getValue().intValue());
+            btn.performClick();
+        }
 
         EditText dateText = view.findViewById(R.id.dateText);
         dateText.setOnClickListener(v -> {
@@ -338,5 +364,14 @@ public class MainFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mainViewModel.setDate(((EditText) view.findViewById(R.id.dateText)).getText().toString());
+        mainViewModel.setEndTime(((EditText) view.findViewById(R.id.endTimeText)).getText().toString());
+        mainViewModel.setStartTime(((EditText) view.findViewById(R.id.startTimeText)).getText().toString());
+        mainViewModel.setSelectedPlace(selectedPlace != null ? selectedPlace.getId() : null);
     }
 }

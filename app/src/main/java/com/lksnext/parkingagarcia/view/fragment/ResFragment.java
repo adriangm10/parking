@@ -122,11 +122,17 @@ public class ResFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_reservations, container, false);
         LinearLayout reservations = view.findViewById(R.id.reservationsList);
 
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getContext(), R.array.reservation_options, android.R.layout.simple_dropdown_item_1line);
-        ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setText(arrayAdapter.getItem(0));
-        ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setAdapter(arrayAdapter);
-
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getContext(), R.array.reservation_options, android.R.layout.simple_dropdown_item_1line);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.dropdown_menu_item);
+        if(mainViewModel.getFilter().getValue() != null) {
+            autoCompleteTextView.setText(mainViewModel.getFilter().getValue());
+        } else {
+            autoCompleteTextView.setText(arrayAdapter.getItem(0));
+        }
+        autoCompleteTextView.setAdapter(arrayAdapter);
+
 
         ((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).setOnItemClickListener((parent, view, position, id) -> {
             String selectedOption = parent.getItemAtPosition(position).toString();
@@ -158,5 +164,11 @@ public class ResFragment extends Fragment {
             ((SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh)).setRefreshing(false);
         });
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mainViewModel.setFilter(((AutoCompleteTextView) view.findViewById(R.id.dropdown_menu_item)).getText().toString());
     }
 }
