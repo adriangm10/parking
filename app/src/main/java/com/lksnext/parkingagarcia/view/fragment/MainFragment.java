@@ -147,7 +147,6 @@ public class MainFragment extends Fragment {
         alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endTimeInMillis - 1000 * 60 * 15, pendingIntent);
     }
 
-    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -157,22 +156,28 @@ public class MainFragment extends Fragment {
         if (mainViewModel.getDate().getValue() != null) {
             ((EditText) view.findViewById(R.id.dateText)).setText(mainViewModel.getDate().getValue());
             String[] date = mainViewModel.getDate().getValue().split("/");
-            this.year = Integer.parseInt(date[2]);
-            this.month = Integer.parseInt(date[1]);
-            this.dayOfMonth = Integer.parseInt(date[0]);
+            if (date.length == 3) {
+                this.year = Integer.parseInt(date[2]);
+                this.month = Integer.parseInt(date[1]);
+                this.dayOfMonth = Integer.parseInt(date[0]);
+            }
         }
         if (mainViewModel.getStartTime().getValue() != null) {
             ((EditText) view.findViewById(R.id.startTimeText)).setText(mainViewModel.getStartTime().getValue());
-            view.findViewById(R.id.endTimeText).setEnabled(true);
             String[] time = mainViewModel.getStartTime().getValue().split(":");
-            this.startMinute = Integer.parseInt(time[1]);
-            this.startHour = Integer.parseInt(time[0]);
+            if (time.length == 2) {
+                view.findViewById(R.id.endTimeText).setEnabled(true);
+                this.startMinute = Integer.parseInt(time[1]);
+                this.startHour = Integer.parseInt(time[0]);
+            }
         }
         if (mainViewModel.getEndTime().getValue() != null) {
             ((EditText) view.findViewById(R.id.endTimeText)).setText(mainViewModel.getEndTime().getValue());
             String[] time = mainViewModel.getEndTime().getValue().split(":");
-            this.endMinute = Integer.parseInt(time[1]);
-            this.endHour = Integer.parseInt(time[0]);
+            if (time.length == 2) {
+                this.endMinute = Integer.parseInt(time[1]);
+                this.endHour = Integer.parseInt(time[0]);
+            }
         }
 
         GridLayout glParking = view.findViewById(R.id.glParking);
@@ -186,7 +191,7 @@ public class MainFragment extends Fragment {
             }
             btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
             selectedButton = btn;
-            selectedPlace = Utils.getParking()[(btn.getId() - 1) / 10][(btn.getId() - 1) % 10];
+            selectedPlace = Utils.getParking()[((int) (btn.getId()) - 1) / 10][((int) (btn.getId()) - 1) % 10];
         }, this);
 
         if (mainViewModel.getSelectedPlace().getValue() != null) {
