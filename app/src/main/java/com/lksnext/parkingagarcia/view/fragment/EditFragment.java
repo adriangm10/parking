@@ -17,10 +17,6 @@ import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.CompositeDateValidator;
-import com.google.android.material.datepicker.DateValidatorPointBackward;
-import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -31,7 +27,6 @@ import com.lksnext.parkingagarcia.domain.Place;
 import com.lksnext.parkingagarcia.domain.Reservation;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

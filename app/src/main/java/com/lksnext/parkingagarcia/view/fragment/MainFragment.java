@@ -1,12 +1,10 @@
 package com.lksnext.parkingagarcia.view.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -21,10 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.CompositeDateValidator;
-import com.google.android.material.datepicker.DateValidatorPointBackward;
-import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -37,7 +31,6 @@ import com.lksnext.parkingagarcia.domain.Reservation;
 import com.lksnext.parkingagarcia.domain.StartReservationReminderReceiver;
 import com.lksnext.parkingagarcia.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -169,7 +162,7 @@ public class MainFragment extends Fragment {
             }
             btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
             selectedButton = btn;
-            selectedPlace = Utils.getParking()[((int) (btn.getId()) - 1) / 10][((int) (btn.getId()) - 1) % 10];
+            selectedPlace = Utils.getParking()[(btn.getId() - 1) / 10][(btn.getId() - 1) % 10];
         }, this);
 
         if (mainViewModel.getSelectedPlace().getValue() != null) {

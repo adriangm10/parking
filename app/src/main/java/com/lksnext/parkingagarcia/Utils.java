@@ -13,7 +13,6 @@ import com.google.android.material.datepicker.CompositeDateValidator;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.timepicker.MaterialTimePicker;
 import com.lksnext.parkingagarcia.domain.Place;
 
 import java.text.SimpleDateFormat;
