@@ -8,29 +8,62 @@ import com.lksnext.parkingagarcia.data.DataRepository;
 import com.lksnext.parkingagarcia.domain.Callback;
 
 public class LoginViewModel extends ViewModel {
-
-    // Aquí puedes declarar los LiveData y métodos necesarios para la vista de inicio de sesión
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
+    MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    MutableLiveData<String> emailError = new MutableLiveData<>();
+    MutableLiveData<String> passwordError = new MutableLiveData<>();
 
     public LiveData<Boolean> isLogged(){
         return logged;
     }
 
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    public LiveData<String> getEmailError() {
+        return emailError;
+    }
+
+    public LiveData<String> getPasswordError() {
+        return passwordError;
+    }
+
+    private boolean setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
+        if (value.isEmpty()) {
+            fieldError.setValue(errorMsg);
+            return true;
+        } else {
+            fieldError.setValue(null);
+            return false;
+        }
+    }
+
     public void loginUser(String email, String password) {
-        //Clase para comprobar si los datos de inicio de sesión son correctos o no
+        boolean ret = setEmptyError(emailError, email, "Email is required");
+        ret |= setEmptyError(passwordError, password, "Password is required");
+        if (ret) return;
         DataRepository.getInstance().login(email, password, new Callback() {
-            //En caso de que el login sea correcto, que se hace
             @Override
-            public void onSuccess() {
-                //TODO
-                logged.setValue(Boolean.TRUE);
+            public void onSuccess(Object ... args) {
+                logged.setValue(true);
             }
 
-            //En caso de que el login sea incorrecto, que se hace
             @Override
-            public void onFailure() {
-                //TODO
-                logged.setValue(Boolean.FALSE);
+            public void onFailure(String error, String errorCode) {
+                logged.setValue(false);
+                switch (errorCode) {
+                    case "ERROR_INVALID_EMAIL":
+                    case "ERROR_USER_NOT_FOUND":
+                        emailError.setValue(error);
+                        break;
+                    case "ERROR_WRONG_PASSWORD":
+                        passwordError.setValue(error);
+                        break;
+                    default:
+                        errorMessage.setValue(error);
+                        break;
+                }
             }
         });
     }

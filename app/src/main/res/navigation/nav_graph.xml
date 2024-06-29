@@ -11,4 +11,18 @@
         android:label="@string/fragment_main"
         tools:layout="@layout/fragment_main">
     </fragment>
+
+    <fragment
+        android:id="@+id/resFragment"
+        android:name="com.lksnext.parkingagarcia.view.fragment.ResFragment"
+        android:label="Reservations"
+        tools:layout="@layout/fragment_reservations">
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.lksnext.parkingagarcia.view.fragment.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
 </navigation>

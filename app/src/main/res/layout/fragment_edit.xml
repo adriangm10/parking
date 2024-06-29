@@ -5,13 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".view.fragment.MainFragment">
+    tools:context=".view.fragment.EditFragment">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="EDIT RESERVATION"
+        android:textSize="25sp"
+        android:layout_marginTop="75dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/orange"
+        />
 
     <RelativeLayout
         android:id="@+id/rlDateTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp" >
+        android:layout_margin="20dp"
+        android:layout_below="@id/tvTitle">
 
         <EditText
             android:id="@+id/startTimeText"
@@ -69,7 +85,6 @@
             android:layout_marginTop="20dp"
             android:clickable="false"
             android:cursorVisible="false"
-            android:enabled="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="End"
@@ -95,13 +110,13 @@
         android:id="@+id/svParking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnReserve"
         android:layout_below="@id/rlDateTime"
+        android:layout_above="@id/llButtons"
         android:layout_centerHorizontal="true">
 
         <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <GridLayout
                 android:id="@+id/glParking"
@@ -113,14 +128,34 @@
         </ScrollView>
     </HorizontalScrollView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnReserve"
+    <LinearLayout
+        android:id="@+id/llButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RESERVE"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:layout_above="@id/divider"
-        android:layout_margin="30dp" />
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="CANCEL"
+            android:scrollbars="vertical" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="CONFIRM"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
 
     <View android:layout_width="match_parent"
         android:id="@+id/divider"

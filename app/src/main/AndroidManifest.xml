@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lksnext.parkingagarcia">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/lks_icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/lks_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ParkingLKS">
+        android:theme="@style/Theme.ParkingLKS"
+        android:usesCleartextTraffic="false">
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.RegisterActivity"
-            android:exported="false" />
+            android:name=".view.activity.ChangePasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.LoginActivity"
-            android:exported="true">
+            android:name=".view.activity.AccountActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.RegisterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lksnext.parkingagarcia.view.activity.MainActivity"
-            android:exported="true" />
+            android:name=".view.activity.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ForgotPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PasswordUpdatedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <receiver android:name=".domain.StartReservationReminderReceiver" />
+        <receiver android:name=".domain.EndReservationReminderReceiver" />
     </application>
 
 </manifest>
