@@ -1,14 +1,24 @@
 package com.lksnext.parkingagarcia;
 
+import android.util.Pair;
 import android.view.View;
 import android.widget.GridLayout;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.CompositeDateValidator;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.timepicker.MaterialTimePicker;
 import com.lksnext.parkingagarcia.domain.Place;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -76,6 +86,53 @@ public class Utils {
         } else {
             return endHour - startHour;
         }
+    }
+
+    public static void setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
+        if (value.isEmpty()) {
+            fieldError.setValue(errorMsg);
+        } else {
+            fieldError.setValue(null);
+        }
+    }
+
+    public static MaterialDatePicker<Long> datePickerDialog() {
+        CalendarConstraints.DateValidator min = DateValidatorPointForward.from(MaterialDatePicker.todayInUtcMilliseconds());
+        CalendarConstraints.DateValidator max = DateValidatorPointBackward.before(MaterialDatePicker.todayInUtcMilliseconds() + 1000 * 60 * 60 * 24 * 7);
+        ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<>();
+        listValidators.add(min);
+        listValidators.add(max);
+        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
+
+        return MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Select a Date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(new CalendarConstraints.Builder().setValidator(validators).build())
+                .build();
+    }
+
+    public static Pair<Date, Date> getDates(Integer year, Integer month, Integer dayOfMonth, Integer startHour, Integer startMinute, Integer endHour, Integer endMinute) {
+        if (year == null || month == null || dayOfMonth == null || startHour == null || endHour == null) {
+            return null;
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, dayOfMonth, startHour, startMinute);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startDate = cal.getTime();
+
+        if (endHour < startHour) {
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        cal.set(Calendar.HOUR_OF_DAY, endHour);
+        cal.set(Calendar.MINUTE, endMinute);
+        Date endDate = cal.getTime();
+
+        return new Pair<>(startDate, endDate);
     }
 
 }

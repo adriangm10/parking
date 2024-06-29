@@ -62,7 +62,8 @@ public class EditFragment extends DialogFragment {
     }
 
     private void disablePlaces(List<Reservation> reservations) {
-        Pair<Date, Date> dates = getDates();
+        Pair<Date, Date> dates = Utils.getDates(year, month, dayOfMonth, startHour, startMinute, endHour, endMinute);
+        if (dates == null) return;
         for (Reservation r : reservations) {
             Log.d(TAG, "Checking reservation " + r.getId() + " startTime: " + r.getHour().getStartTime() + " endTime: " + r.getHour().getEndTime() + " startDate: " + dates.first.getTime() + " endDate: " + dates.second.getTime());
             if (r.getHour().isOverlapping(new Hour(dates.first, dates.second)) && !reservation.getId().equals(r.getId())) {
@@ -79,28 +80,6 @@ public class EditFragment extends DialogFragment {
                 view.findViewById((int) r.getPlace().getId()).setEnabled(true);
             }
         }
-    }
-
-    private Pair<Date, Date> getDates() {
-        if (year == null || month == null || dayOfMonth == null || startHour == null || endHour == null) {
-            return null;
-        }
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month - 1, dayOfMonth, startHour, startMinute);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Date startDate = cal.getTime();
-
-        if (endHour < startHour) {
-            cal.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        cal.set(Calendar.HOUR_OF_DAY, endHour);
-        cal.set(Calendar.MINUTE, endMinute);
-        Date endDate = cal.getTime();
-
-        return new Pair<>(startDate, endDate);
     }
 
     @Override
@@ -153,20 +132,7 @@ public class EditFragment extends DialogFragment {
         endTimeText.setText(Utils.formatTimeToHHmm(reservation.getHour().getEndTime(), getResources().getConfiguration().getLocales().get(0)));
 
         view.findViewById(R.id.dateText).setOnClickListener(v -> {
-            CalendarConstraints.DateValidator min = DateValidatorPointForward.from(MaterialDatePicker.todayInUtcMilliseconds());
-            CalendarConstraints.DateValidator max = DateValidatorPointBackward.before(MaterialDatePicker.todayInUtcMilliseconds() + 1000 * 60 * 60 * 24 * 7);
-            ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<>();
-            listValidators.add(min);
-            listValidators.add(max);
-            CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
-
-            MaterialDatePicker<Long> picker = MaterialDatePicker.Builder
-                    .datePicker()
-                    .setTitleText("Select a Date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(new CalendarConstraints.Builder().setValidator(validators).build())
-                    .build();
+            MaterialDatePicker<Long> picker = Utils.datePickerDialog();
 
             picker.addOnPositiveButtonClickListener(selection -> {
                 Calendar cal = Calendar.getInstance();
@@ -238,7 +204,7 @@ public class EditFragment extends DialogFragment {
             }
             reservation.setPlace(selectedPlace);
             reservation.setDate(((EditText) view.findViewById(R.id.dateText)).getText().toString());
-            Pair<Date, Date> dates = getDates();
+            Pair<Date, Date> dates = Utils.getDates(year, month, dayOfMonth, startHour, startMinute, endHour, endMinute);
             reservation.getHour().setStartTime(dates.first.getTime());
             reservation.getHour().setEndTime(dates.second.getTime());
             String prevId = reservation.getId();
