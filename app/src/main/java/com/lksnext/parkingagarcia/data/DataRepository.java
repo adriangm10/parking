@@ -113,6 +113,11 @@ public class DataRepository {
     }
 
     public void getUserReservations(Callback callback) {
+        if (auth.getCurrentUser() == null) {
+            callback.onFailure("User not logged in", "");
+            return;
+        }
+
         db.collection("reservations")
                 .whereEqualTo("user", auth.getCurrentUser().getUid())
                 .get()
