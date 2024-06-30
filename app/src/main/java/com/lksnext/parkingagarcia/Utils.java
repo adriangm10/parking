@@ -87,11 +87,13 @@ public class Utils {
         }
     }
 
-    public static void setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
-        if (value.isEmpty()) {
+    public static boolean setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
+        if (value == null || value.isEmpty()) {
             fieldError.setValue(errorMsg);
+            return true;
         } else {
             fieldError.setValue(null);
+            return false;
         }
     }
 

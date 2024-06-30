@@ -32,6 +32,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.DayOfWeek;
+import java.util.Calendar;
+import java.util.Locale;
+
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class MainFragmentTest {
@@ -66,26 +70,34 @@ public class MainFragmentTest {
 
     @Test
     public void testReserve() throws Exception {
+        Calendar now = Calendar.getInstance();
+        String monthName = now.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+
         onView(withId(R.id.dateText)).perform(click());
         onView(allOf(
                 isDescendantOfA(withTagValue(equalTo("MONTHS_VIEW_GROUP_TAG"))),
-                withContentDescription("Thursday, June 27")
+                withContentDescription("Today " + monthName + ", " + now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + now.get(Calendar.DAY_OF_MONTH))
         )).perform(click());
         onView(withId(com.google.android.material.R.id.confirm_button)).perform(click());
-        onView(withId(R.id.dateText)).check(matches(withText("27/6/2024")));
+        onView(withId(R.id.dateText)).check(matches(withText(now.get(Calendar.DAY_OF_MONTH) + "/" + (now.get(Calendar.MONTH) + 1) + "/" + now.get(Calendar.YEAR))));
 
         onView(withId(R.id.startTimeText)).perform(click());
-        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
-        onView(withId(R.id.startTimeText)).check(matches(withText("12:00")));
-
-        onView(withId(R.id.endTimeText)).perform(click());
         onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
         onView(allOf(
                 withText("12"),
                 isDisplayed()
-        )).perform(replaceText("14"));
+        )).perform(replaceText("20"));
         onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
-        onView(withId(R.id.endTimeText)).check(matches(withText("14:00")));
+        onView(withId(R.id.startTimeText)).check(matches(withText("20:00")));
+
+        onView(withId(R.id.endTimeText)).perform(click());
+        onView(withId(com.google.android.material.R.id.material_hour_text_input)).perform(click());
+        onView(allOf(
+                withText("20"),
+                isDisplayed()
+        )).perform(replaceText("22"));
+        onView(withId(com.google.android.material.R.id.material_timepicker_ok_button)).perform(click());
+        onView(withId(R.id.endTimeText)).check(matches(withText("22:00")));
 
         onView(withId(1)).perform(click());
         onView(withId(R.id.btnReserve)).perform(click());
