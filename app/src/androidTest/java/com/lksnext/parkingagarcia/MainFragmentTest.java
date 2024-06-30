@@ -45,7 +45,7 @@ public class MainFragmentTest {
     private static final String TAG = "MainFragmentTest";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         auth.createUserWithEmailAndPassword("test@test.com", "test1234").addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d(TAG, "User created");
