@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.data.DataRepository;
 import com.lksnext.parkingagarcia.domain.Callback;
 
@@ -44,21 +45,11 @@ public class RegisterViewModel extends ViewModel {
         return registered;
     }
 
-    private boolean setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
-        if (value.isEmpty()) {
-            fieldError.setValue(errorMsg);
-            return true;
-        } else {
-            fieldError.setValue(null);
-            return false;
-        }
-    }
-
     public void registerUser(String name, String email, String pass, String confirmPass) {
-        boolean ret = setEmptyError(nameError, name, "Name is required");
-        ret |= setEmptyError(emailError, email, "Email is required");
-        ret |= setEmptyError(passwordError, pass, "Password is required");
-        ret |= setEmptyError(confirmPasswordError, confirmPass, "Confirm password is required");
+        boolean ret = Utils.setEmptyError(nameError, name, "Name is required");
+        ret |= Utils.setEmptyError(emailError, email, "Email is required");
+        ret |= Utils.setEmptyError(passwordError, pass, "Password is required");
+        ret |= Utils.setEmptyError(confirmPasswordError, confirmPass, "Confirm password is required");
         if (!pass.isEmpty() && !confirmPass.isEmpty() && !pass.equals(confirmPass)) {
             confirmPasswordError.setValue("Passwords do not match");
             return;

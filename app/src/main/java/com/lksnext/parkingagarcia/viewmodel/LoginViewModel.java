@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.lksnext.parkingagarcia.Utils;
 import com.lksnext.parkingagarcia.data.DataRepository;
 import com.lksnext.parkingagarcia.domain.Callback;
 
@@ -29,19 +30,9 @@ public class LoginViewModel extends ViewModel {
         return passwordError;
     }
 
-    private boolean setEmptyError(MutableLiveData<String> fieldError, String value, String errorMsg) {
-        if (value.isEmpty()) {
-            fieldError.setValue(errorMsg);
-            return true;
-        } else {
-            fieldError.setValue(null);
-            return false;
-        }
-    }
-
     public void loginUser(String email, String password) {
-        boolean ret = setEmptyError(emailError, email, "Email is required");
-        ret |= setEmptyError(passwordError, password, "Password is required");
+        boolean ret = Utils.setEmptyError(emailError, email, "Email is required");
+        ret |= Utils.setEmptyError(passwordError, password, "Password is required");
         if (ret) return;
         DataRepository.getInstance().login(email, password, new Callback() {
             @Override
