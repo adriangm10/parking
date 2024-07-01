@@ -162,7 +162,7 @@ public class MainFragment extends Fragment {
             }
             btn.setStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.orange, null)));
             selectedButton = btn;
-            selectedPlace = Utils.getParking()[(btn.getId() - 1) / 10][(btn.getId() - 1) % 10];
+            selectedPlace = Utils.getParking()[((int) btn.getId() - 1) / 10][((int) btn.getId() - 1) % 10];
         }, this);
 
         if (mainViewModel.getSelectedPlace().getValue() != null) {
